@@ -1,4 +1,4 @@
-Attached is a .CSV file named "austpop" depicting the population count of 8 Australaian states through the year 1917 to 1997 
+Attached is a .CSV file named "austpop" depicting the population count of 8 Australaian states through the year 1917 to 1997 with a period gap of 10 years
 
 Following Charts are needed to be depicted using R:
 
