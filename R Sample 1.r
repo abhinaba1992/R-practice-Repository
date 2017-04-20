@@ -1,27 +1,9 @@
-# The below sample code is to generate Sample details for the Population of Australian states.
+#Note that if you are working from R Desktop, you may need to set the working directory first
+#The below code does it
+setwd("D:\\Users\\abhincha\\Downloads")
 
-SrNo <- c(1,2,3,4,5,6,7,8,9)
-year <- c(1917,1927,1937,1947,1957,1967,1977,1987,1997)
-NSW <- c(1904,2402,2693,2985,3625,4295,5002,5617,6274)
-Vic <- c(1409,1727,1853,2055,2656,3274,3837,4210,4605)
-Qld <- c(683,873,993,1106,1413,1700,2130,2675,3401)
-SA <- c(440,565,589,646,873,1110,1286,1393,1480)
-WA <- c(306,392,457,502,688,879,1204,1496,1798)
-Tas <- c(193,211,233,257,326,375,415,449,474)
-NT <- c(5,4,6,11,21,62,104,158,187)
-ACT <- c(3,8,11,17,38,103,214,265,310)
-Aust <- c(4943,6182,6835,7579,9640,11798,14192,16263,18529)
-
-#Creating the data frame from the vectors coz I am running the scripts on r-fiddle.org
-AustralianStates <- data.frame(SrNo,year,NSW,Vic,Qld,SA ,WA ,Tas,NT ,ACT,Aust)
-
-#Alternately, if you have using R desktop or any other portal that supports uploading your data file you can use the following code
-#AustralianStates <- read.csv(file="austpop.csv", header=TRUE, sep=",")
-
-#Note that if you are working from R Desktop, you may need to set the working directory before executing the above step
-#The below code does the following
-#setwd("D:\\Users\\abhincha\\Downloads")
-
+#Creating the data frame from the files
+AustralianStates <- read.csv(file="austpop.csv", header=TRUE, sep=",")
 
 #PLOT THE STATE WISE POPULATION FOR ALL THE STATES FOR THE YEAR 1947
 
