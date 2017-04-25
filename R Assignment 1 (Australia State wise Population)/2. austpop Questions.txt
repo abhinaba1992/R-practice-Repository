@@ -1,6 +1,6 @@
 Attached is a .CSV file named "austpop" depicting the population count of 8 Australaian states through the year 1917 to 1997 with a period gap of 10 years
 
-Following Charts are needed to be depicted using R:
+Following Charts are needed to be created using R:
 
 1. PLOT THE STATE WISE POPULATION FOR ALL THE STATES FOR THE YEAR 1947 IN A BAR GRAPH.
 2. PLOT A PIE CHART FOR DEPICTING POPULATIONS FOR QUEENS LAND VS TASMANIA IN THE YEAR 1977.
