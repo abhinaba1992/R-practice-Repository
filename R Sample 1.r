@@ -87,13 +87,4 @@ years <- statedetailsbeforegivendaterange$year
 barplot(populationdiff,names.arg = years,xlab = "Years",ylab = "Population Count",
 main = "Aus Pop 1950-80 excl WA",col.main="White",col.lab="White",col.axis="White",
 col="darkcyan")
- 
-
-
-
-
-
-
-
-
 
