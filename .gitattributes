@@ -1,5 +1,5 @@
 *.R.md linguist-language=R
 *.r linguist-language=R
-*.png linguist-language=Others
-*.txt linguist-language=Others
+*.png linguist-language=R
+*.txt linguist-language=R
 *.csv linguist-language=R
