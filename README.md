@@ -1,6 +1,15 @@
 ## Welcome to R-practice-Repository
 
-This Repository encapsulates vivid R assignments that are based around demonstrating the data visualizations and statisctial computing capabilities of R-Programming language. 
+This branch of "R-practice-Repository" contains various R sample solutions depicting different data visualization capabilities of R Programming language.
+
+Each Assignment contains the following components:
+
+* Data Sample file (.csv file)
+* Assignment Problems (.txt file)
+* Screenshot of expected output (.png file)
+* R script (.r file)
+
+The motive here is to inculcate a problem-solution approach towards learning basic data visualization using R. Hope you enjoy. Cheers!
 
 
 
