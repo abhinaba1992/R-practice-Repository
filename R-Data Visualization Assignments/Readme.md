@@ -1,8 +1,10 @@
 ## Welcome to R-practice-Repository
 
-This directory of "R-practice-Repository" contains various R sample solutions depicting different data visualization capabilities of R Programming language.
+This directory of "R-practice-Repository" contains various R sample assigments depicting different data visualization capabilities of R Programming language.
 
-Each Assignment contains the following components:
+Each folder contains a particular assignment.
+
+Each Assignment is comprised of the following components:
 
 * Data Sample file (.csv file)
 * Assignment Problems (.txt file)
