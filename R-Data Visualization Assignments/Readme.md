@@ -1,6 +1,6 @@
 ## Welcome to R-practice-Repository
 
-This branch of "R-practice-Repository" contains various R sample solutions depicting different data visualization capabilities of R Programming language.
+This directory of "R-practice-Repository" contains various R sample solutions depicting different data visualization capabilities of R Programming language.
 
 Each Assignment contains the following components:
 
