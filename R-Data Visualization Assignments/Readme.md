@@ -7,9 +7,9 @@ Each folder contains a particular assignment.
 Each Assignment is comprised of the following components:
 
 * Data Sample file (.csv file)
-* Assignment Problems (.txt file)
+* Assignment Problems text (.txt file)
 * Screenshot of expected output (.png file)
-* R script (.r file)
+* R script file or solution(.r file)
 
 The motive here is to inculcate a problem-solution approach towards learning basic data visualization using R. Hope you enjoy. Cheers!
 
