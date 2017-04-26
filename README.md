@@ -11,4 +11,4 @@ Each Assignemnt contains the following components:
 * Answer Solution file. (.r file)
 
 The motive here is to inclucate a problem-solution approach towards learning basic data visulaization using R.
-Hope you Enjoy!
+Hope you Enjoy. Cheers!
