@@ -1,8 +1,12 @@
-## Welcome to GitHub Pages
+## Welcome to R assignments
 
-You can use the [editor on GitHub](https://github.com/abhinaba1992/R-practice-Repository/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+This branch of "R-practice-Repository" contains various R sample solutions depicting various data visulaization capabilities
+of R Programming language.
+Each Assignemnt contains the following components:
+* Data Sample file (.csv file)
+* Assignment Problems (.txt file)
+* Screenshot of expected output (.png file)
+* Answer Solution file. (.r file)
 
 ### Markdown
 
