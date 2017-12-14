@@ -384,9 +384,9 @@
   
   
   #---------------------------------------------------------------------------------------------------
-    #Lists in R
+  #Lists in R
     
-    x=c(1,2,3)
+  x=c(1,2,3)
   y=c("a","b")
   z=1.25
   
@@ -409,15 +409,15 @@
   list2$a
   #2nd level access
   list2$a[2]
-  -------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------
     
-    #cbind(), this is used for appending columns to a data frame
-    #rbind(), this isused fro appending rows to a datafram
+  #cbind(), this is used for appending columns to a data frame
+  #rbind(), this isused fro appending rows to a datafram
     
-    -------------------------------------------------------------------
-    #Joins
-    #Creating the tables
-    empid=c(1,2,3,4,5)
+  #---------------------------------------------------------------------------------------------------
+  #Joins
+  #Creating the tables
+  empid=c(1,2,3,4,5)
   empname=c("john","Kevinf","Rob","Mike","Stan")
   deptid=c(1,2,2,3,4)
   
@@ -447,7 +447,7 @@
   full_join(emptable,depttable,by="deptid")
   
   
-  #following joins willonly return the cols from the first data frame
+  #following joins will only return the cols from the first data frame
   
   #same as inner join, the only diff. is that it would only return the cols from the 1st data frame
   semi_join(emptable,depttable,by="deptid")
@@ -455,44 +455,45 @@
   #Returns the mismatched rows  and only the cols of the 1st data  frame
   anti_join(emptable,depttable,by="deptid")
   
-  ------------------------------------------------------
-    #read.csv(<file path> or file.choose(),row.names=T or F)
-    #write.csv(<data frame>,<file path> or file.choose(),header=T or F)
+  #---------------------------------------------------------------------------------------------------
+  #read.csv(<file path> or file.choose(),row.names=T or F)
+  #write.csv(<data frame>,<file path> or file.choose(),header=T or F)
     
-    #note that paths in R are not denoted as "\", you may either choose "\\" or "/"
-    ------------------------------------------------------
-    #The follwoing functions help us to choose a sample set of records from above or below a data frame,
-    #by defaultit is 6
-    head(df1)
+  #note that paths in R are not denoted as "\", you may either choose "\\" or "/"
+  #---------------------------------------------------------------------------------------------------
+  #The follwoing functions help us to choose a sample set of records from above or below a data frame,
+  #by defaultit is 6
+  head(df1)
   tail(df1)
   #if you wish to choose the number of recordsto be selected, you maydo thefollowing
   head(df1,20)
   tail(df1,20)
-  ------------------------------------------------------
-    #Filtering samples
-    #1
-    data(iris)  
+  #---------------------------------------------------------------------------------------------------
+  #Filtering samples
+  #1
+  data(iris)  
   df1=iris
   
   #Choosing all the columns but only selected rows that satisfy the given condition
   df1[df1$Sepal.Length>2,]
   #2
-  df1[df1$Sepal.Length>2 & df1$Sepal.Width <3,]
-  
+  df1[df1$Sepal.Length>2 & df1$Sepal.Width <3,] #and Clause
   #3
+  df1[df1$Sepal.Length>2 | df1$Sepal.Width <3,] #or Clause
+  #4
   #Choosing a specific column and only selected rows that satisfy the given condition
   df1[df1$Sepal.Length>2,"Sepal.Width"]
   
   #Choosing a specific column first and then applying the required condition as stated in [] brackets
-  #4
+  #5
   df1$Sepal.Length[df1$Sepal.Width<4]
   
-  -----------------------------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------
     
-    #Part 4 [Univariate statistics] (9th Sep 2017)
+  #Part 4 [Univariate statistics] (9th Sep 2017)
     
-    #Univariate statistical fuctions
-    data(mtcars)
+  #Univariate statistical fuctions
+  data(mtcars)
   df1=mtcars
   df1
   
