@@ -176,7 +176,6 @@
   #Increasing the values in a sequence by a specific interval
   seq(1,5,by=0.5)
   
-  
   #We can play around with the location of params of seq,but in that case, we need to specify some labels as 
   #it may turn out to not work properly
   #,e.g.
