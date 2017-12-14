@@ -70,3 +70,17 @@ groups.2=cutree(cars.hclust,2)
 
 #Looking at the cars in diff. clusters
 groups.2
+
+#Analysing the clusters
+table(groups.2)
+
+#Now we are trying to compare two clusters based on their mean
+apply(df_cars,2,function(x) tapply(x,groups.2,mean))
+
+#Validating our cluster (We would need a library named cluster)
+library(cluster)
+
+#Validating our cluster with silhoutee plot
+diss=daisy(cars.std) #We are passing the standardised data fr our car data set
+sk=silhouette(groups.2,diss)
+plot(sk)
