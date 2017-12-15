@@ -1,6 +1,6 @@
 #This portion covers the concepts of R basics, data visualisation in R, data preparation in R and  univariate statistics
 #Author: Abhinaba Chakraborty
-#last Updated: 22.11.2017
+#last Updated: 15.12.2017
 
 #dplyr: used for joins, also functions like mutate, select, filter, arrange, summarise and other data preparation functions.
 #psych : contains the describe function
