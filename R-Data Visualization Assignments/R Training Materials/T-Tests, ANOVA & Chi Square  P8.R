@@ -3,7 +3,7 @@
 #last Updated: 26.11.2017
 
 #Setting the work directory
-setwd("C:/E drive/Docs/R Practice docs")
+setwd("C:/Users/chakrabortyab/Desktop/R Practice/Data")
 
 #Reading the values
 winedata=read.csv("winequality-red.csv",sep=";")
@@ -25,17 +25,17 @@ View(winedata)
 # Or else we reject the null hypothesis
 
 
-t.test(winedata$fixed.acidity,mu=6.10)
+t.test(winedata$fixed.acidity,mu=6.10) #reject
 
 
 #By default the level of significance is 95%, if you wish to change it, we do the following
-t.test(winedata$fixed.acidity,mu=6.10,conf.level = 0.99)
+t.test(winedata$fixed.acidity,mu=6.10,conf.level = 0.99) #reject
 
 
 #If we are going for a lesser than or greater test for alternate hypothesis, we do the following
-t.test(winedata$fixed.acidity,mu=6.10,alternative = "less")
+t.test(winedata$fixed.acidity,mu=6.10,alternative = "less") #accept
 
-t.test(winedata$fixed.acidity,mu=6.10,alternative = "greater")
+t.test(winedata$fixed.acidity,mu=6.10,alternative = "greater") #reject
 
 #---------------------------------------------------------------------------------------------------
   
@@ -53,7 +53,7 @@ t.test(winedata$free.sulfur.dioxide,winedata$total.sulfur.dioxide, paired= TRUE,
 #---------------------------------------------------------------------------------------------------
   
   
-#Unpaired T-tests (It is used to compare the same attributr for two different entities or groups)
+#Unpaired T-tests (It is used to compare the same attribute for two different entities or groups)
 # you can think that here the comparison happens row wise
 # filtering the alcohol quality entity
 alcohol_quality3=winedata$alcohol[winedata$quality==3]
@@ -69,10 +69,10 @@ alcohol_quality7=winedata$alcohol[winedata$quality==7]
 var.test(alcohol_quality3,alcohol_quality7)
 
 
-# We accept the hypothesis if we get a highr P-value from the above f test
+# We accept the null hypothesis if we get a highr P-value from the above f test
 # We then do the following
-t.test(alcohol_quality3,alcohol_quality7, var.equal = TRUE) # We can specify teh value for var.equal to be true or valse
-# based on the result of the f- test. i.e; if we accept the
+t.test(alcohol_quality3,alcohol_quality7, var.equal = TRUE) # We can specify the value for var.equal to be true or valse
+# based on the result of the f- test. i.e; if we accept the null hypothesis for the
 # f - test then var.equal = TRUE or else it's FALSE.
 # adding var.equal attribute automatically makes sure that
 # an unpaired t - test has to be done.
