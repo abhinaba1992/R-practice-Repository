@@ -563,7 +563,7 @@ round(prop.table(df1$am),2)
 #Prop. table gives us percentages across all values of our table, if we want to get percentage across rows or column of a 
 #data frame, we use the following 
 #Row wise % age
-prop.table(table(df1$am))
+prop.table(table(df1$am),1)
 
 #---------------------------------------------------------------------------------------------------
   
@@ -572,13 +572,17 @@ xtabs(~mpg,data = df1)
 
 #E.g.1
 xtabs(~mpg,data = df1)
+xtabs(~mpg,data = df1,1)
+
 
 #E.g.2
 xtabs(~disp,data = df1)
+xtabs(~disp,data = df1,1)
 
 
 #Multiple column in xtabs
 xtabs(~mpg+disp,data=df1)
+xtabs(~mpg+disp,data=df1,1)
 
 #---------------------------------------------------------------------------------------------------
   
@@ -590,18 +594,18 @@ margin.table(df1$mpg,1)
 #Column wise
 margin.table(df1$mpg,2)
 
-----------------------------------------------------
-  #Add margins help us to append the summation result along with the sum values
-  addmargins(table(df1$am),1)
+#---------------------------------------------------------------------------------------------------
+#Add margins help us to append the summation result along with the sum values
+addmargins(table(df1$am),1)
 
 addmargins(table(df1),2)
 
 
 ftable(df1$mpg)
 
------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
   
-  #Part 5 [data visualisations with ggplot] (10th Sep 2017)
+#Part 5 [data visualisations with ggplot] (10th Sep 2017)
   
   data(mtcars)
 df1=mtcars
