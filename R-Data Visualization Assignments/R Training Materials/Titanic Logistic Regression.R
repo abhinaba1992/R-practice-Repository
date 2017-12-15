@@ -1,6 +1,6 @@
 # Data Loading
 
-setwd("C:/Users/chakrabortyab/Desktop/R Practice")
+setwd("C:/Users/Abhinaba/Desktop/Edvancer Materials/Others/Practice")
 
 Titanic_data=read.csv("train.csv")
 
@@ -48,7 +48,7 @@ Titanic_data = Titanic_data %>% mutate(age_young=as.numeric(Titanic_data$Age>0 &
                                        age_Adult=as.numeric(Titanic_data$Age>20 & Titanic_data$Age<=40),
                                        age_MidAged=as.numeric(Titanic_data$Age>40 & Titanic_data$Age<=60)
                                        #,age_Veteran=as.numeric(Titanic_data$Age>60)
-                                       ) %>% select(-Age)
+) %>% select(-Age)
 
 
 glimpse(Titanic_data)
@@ -121,18 +121,119 @@ glimpse(Titanic_data)
 View(Titanic_data)
 
 
-#Removing Name, Passenger ID, Ticket and Cabin as it didn't amke any sense to include them
+#Removing Name, Ticket and Cabin as it didn't amke any sense to include them
 
-Titanic_data=Titanic_data %>% select(-Name,-PassengerId,-Ticket,-Cabin)
+Titanic_data=Titanic_data %>% select(-Name,-Ticket,-Cabin)
 
 glimpse(Titanic_data)
 View(Titanic_data)
 
+#Splitting the data into train and text
+s=sample(1:nrow(Titanic_data),0.7*nrow(Titanic_data))
+Titanic_data_train=Titanic_data[s,]
+Titanic_data_test=Titanic_data[-s,]
 
 
 #Removing multicollienarity
+library(car)
+
+
+for_vif=lm(Survived~.-PassengerId,data=Titanic_data_train)
+
+t=vif(for_vif)
+sort(t,decreasing=TRUE)
+
+
+#As per the VIF rule, omitting parch_0
+for_vif=lm(Survived~.-PassengerId-parch_o,data=Titanic_data_train)
+t=vif(for_vif)
+sort(t,decreasing=TRUE)
+
+#As per the VIF rule, omitting SibSp_0
+for_vif=lm(Survived~.-PassengerId-parch_o-SibSp_0,data=Titanic_data_train)
+t=vif(for_vif)
+sort(t,decreasing=TRUE)
+
+
+#As per the VIF rule, age_Adult
+for_vif=lm(Survived~.-PassengerId-parch_o-SibSp_0-age_Adult,data=Titanic_data_train)
+t=vif(for_vif)
+sort(t,decreasing=TRUE)
+
+
+#Now we remove all the above variables from our data set
+Titanic_data_train_fit=Titanic_data_train %>% select(-PassengerId,-parch_o,-SibSp_0,-age_Adult)
+
+
+#running logistic regression
+fit=glm(Survived~.,family="binomial",data=Titanic_data_train_fit)
+
+summary(fit)
+
+#Removing the unecessary variables one by one through step function
+fit=step(fit)
+
+
+formula(fit)
+
+
+fit1=glm(Survived ~ pcl_1 + pcl_3 + sex_m + age_young + age_MidAged + 
+           SibSp_3 + SibSp_4 + parch_4 + Emb_s,family="binomial",data=Titanic_data_train)
+
+summary(fit1)
+
+
+
+fit1=glm(Survived ~ pcl_1 + pcl_3 + sex_m + age_young + age_MidAged + 
+           SibSp_3 + SibSp_4 + Emb_s,family="binomial",data=Titanic_data_train)
+summary(fit1)
 
 
 
 
+fit1=glm(Survived ~ pcl_1 + pcl_3 + sex_m + age_young + age_MidAged + 
+           SibSp_3 + Emb_s,family="binomial",data=Titanic_data_train)
+summary(fit1)
 
+
+
+
+fit1=glm(Survived ~ pcl_3 + sex_m + age_MidAged + 
+           SibSp_3 + Emb_s,family="binomial",data=Titanic_data_train)
+summary(fit1)
+
+
+#All the variables with a higher pr(greater than 0.05) values are removed
+Titanic_data_train$scores=predict(fit1,newdata = Titanic_data_train,type="response")
+View(Titanic_data_train)
+
+
+cutoff_data=data.frame(cutoff=0,TP=0,FN=0,FP=0,TN=0)
+cutoffs=round(seq(0,1,length=100),3)
+
+for(cutoff in cutoffs)
+{
+  predicted=as.numeric(Titanic_data_train$scores>cutoff)
+  
+  TP=sum(predicted==1 & Titanic_data_train$Survived==1)
+  FP=sum(predicted==1 & Titanic_data_train$Survived==0)
+  TN=sum(predicted==0 & Titanic_data_train$Survived==0)
+  FN=sum(predicted==0 & Titanic_data_train$Survived==1)
+  cutoff_data=rbind(cutoff_data,c(cutoff,TP,FP,TN,FN))
+}
+
+
+View(cutoff_data)
+
+
+cutoff_data=cutoff_data[-1,]
+
+
+cutoff_data=cutoff_data %>%
+  mutate(P=FN+TP,N=TN+FP,Sn=TP/P, Sp=TN/N,
+         dist=sqrt((1-Sn)**2+(1-Sp)**2)) %>%
+  mutate(KS=abs((TP/P)-(FP/N))) %>%
+  select(-P,-N)
+
+
+View(cutoff_data)
