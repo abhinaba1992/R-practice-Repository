@@ -37,8 +37,8 @@ t.test(winedata$fixed.acidity,mu=6.10,alternative = "less")
 
 t.test(winedata$fixed.acidity,mu=6.10,alternative = "greater")
 
---------------------------------------------------------------------------------------------------------------------------
-
+#---------------------------------------------------------------------------------------------------
+  
 # Paired T-tests (It is used to compare two different attributes of a common entity or group or comparing a before and 
 # after scenario), we can think of this as comparing two different columns
 # By default the Mu value is 0 for paired t-tests
@@ -50,9 +50,9 @@ t.test(winedata$free.sulfur.dioxide,winedata$total.sulfur.dioxide, paired= TRUE)
 # If we want to manually pass a value for null hypothesis or Mu we can do the following
 t.test(winedata$free.sulfur.dioxide,winedata$total.sulfur.dioxide, paired= TRUE,mu=0.5)
 
---------------------------------------------------------------------------------------------------------------------------
-
-
+#---------------------------------------------------------------------------------------------------
+  
+  
 #Unpaired T-tests (It is used to compare the same attributr for two different entities or groups)
 # you can think that here the comparison happens row wise
 # filtering the alcohol quality entity
@@ -72,12 +72,12 @@ var.test(alcohol_quality3,alcohol_quality7)
 # We accept the hypothesis if we get a highr P-value from the above f test
 # We then do the following
 t.test(alcohol_quality3,alcohol_quality7, var.equal = TRUE) # We can specify teh value for var.equal to be true or valse
-                                                            # based on the result of the f- test. i.e; if we accept the
-                                                            # f - test then var.equal = TRUE or else it's FALSE.
-                                                            # adding var.equal attribute automatically makes sure that
-                                                            # an unpaired t - test has to be done.
+# based on the result of the f- test. i.e; if we accept the
+# f - test then var.equal = TRUE or else it's FALSE.
+# adding var.equal attribute automatically makes sure that
+# an unpaired t - test has to be done.
 
---------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #ANOVA
 # Now unpaired T test would help to compare two different entities r groups, however if we want to compare
 # Multiple entities or groups, we go for ANOVA, here we basically check for variance and thus a f-test is
@@ -103,7 +103,7 @@ pairwise.t.test(winedata$alcohol,winedata$quality,p.adf="none")
 #We can visualise the change in means through a box plot as well
 boxplot(winedata$alcohol~winedata$quality)
 
---------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
 #Chi square test
 # Chi square test for proportions
 #It is used to check and verify for proportions 
@@ -111,11 +111,11 @@ boxplot(winedata$alcohol~winedata$quality)
 # Suppose it is claimed that we have equal proportions of qualities for all types where as for 7 and 8 we have half 
 # proportions, ie; our proportions for 3,4,5,6,7 and 8 and 20%,20%,20%,20%,10% and 10% respectively.
 #  (or 0.20,0.20,0.20,0.20,0.10,0.10)
-
+  
   
 #First we can check for proportions
 table(winedata$quality)
-  
+
 
 #Then we check for the percentage of the quality values for our assurance
 prop.table(table(winedata$quality))
