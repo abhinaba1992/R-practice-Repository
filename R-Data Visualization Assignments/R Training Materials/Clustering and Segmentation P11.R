@@ -104,6 +104,7 @@ d = data.frame(
   x=unlist(lapply(1:g,function(i) rnorm(n/g, runif(1)*i^2))),
   y=unlist(lapply(1:g,function(i) rnorm(n/g, runif(1)*i^2)))
 )
+#Visualising the above dataset
 plot(d,col="mediumturquoise",pch=16,
      xlab="Arrival Time Deviations",
      ylab="Departure Time Deviations",
