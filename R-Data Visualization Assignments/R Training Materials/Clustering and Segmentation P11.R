@@ -2,7 +2,7 @@
 # We are using the data set mtcars here.
 
 #Author: Abhinaba Chakraborty
-#last Updated: 17.12.2017
+#last Updated: 18.12.2017
 
 data(mtcars)
 df_cars=mtcars
@@ -101,8 +101,8 @@ n=100
 g=6
 set.seed(g)
 d = data.frame(
-    x=unlist(lapply(1:g,function(i) rnorm(n/g, runif(1)*i^2))),
-    y=unlist(lapply(1:g,function(i) rnorm(n/g, runif(1)*i^2)))
+  x=unlist(lapply(1:g,function(i) rnorm(n/g, runif(1)*i^2))),
+  y=unlist(lapply(1:g,function(i) rnorm(n/g, runif(1)*i^2)))
 )
 plot(d,col="mediumturquoise",pch=16,
      xlab="Arrival Time Deviations",
@@ -129,10 +129,11 @@ for (i in 2:15) wss[i]=sum(kmeans(mydata,centers = i)$withinss)
 #So, we are plotting an elbow chart/scree plot to determine the optimal no. of cluster
 plot(1:15,wss,type="b",xlab="Number of clusters",ylab="within groups sum of squares",col="mediumseagreen",pch=12)
 
- 
+
 #So from the elbow chart we concluded that we can have 4 number of clusters for our dataset
 fit=kmeans(mydata,4)
 
+#We would get an auto calculated column named cluster for the object fit
 #Adding the calculated cluster to the original data set d
 d$cluster=fit$cluster
 
@@ -141,3 +142,71 @@ ggplot(d,aes(x=cluster))+geom_bar(aes(fill=cluster))
 
 
 #Taking a real time data set to test k-means
+setwd("C:/Users/chakrabortyab/Desktop/R Practice/Data")
+
+wine=read.csv("winequality-red.csv",sep=";")
+
+library(dplyr)
+
+#We are only selecting a selected number of columns for this example
+wine=wine %>% select(pH,sulphates,alcohol,total.sulfur.dioxide)
+
+
+#Scaling/ standardising the data by mean and standard deviation
+wine_std=scale(wine)
+
+
+#Implementing K-means clustering
+#finding wss or within sum of squares
+wss=(nrow(wine_std)-1)*sum(apply(wine_std,2,var))
+
+#Determining the optimal number of clusters by iterating through the numbers withing the k-means function
+for (i in 2:15) wss[i]=sum(kmeans(wine_std,centers = i)$withinss)
+
+
+#Plotting the graph
+plot(1:15,wss,type="b",xlab="Number of clusters",ylab="within groups sum of squares",col="mediumseagreen",pch=12)
+
+
+#So from the elbow chart we concluded that we can have 6 number of clusters for our dataset
+fit=kmeans(wine_std,6)
+
+
+#We would get an auto calculated column named cluster for the above object fit
+#Adding the calculated cluster to the original data set wine
+wine$cluster=fit$cluster
+wine_std$cluster=fit$cluster
+
+#Visualising clustering based on different fields
+library(ggplot2)
+#Trying diff. combos for clustering 
+#Visualising Clustering based on ph in x-axis and alcohol in y axis
+ggplot(wine,aes(pH,alcohol,color=as.factor(cluster)))+geom_point()
+
+#Visualising Clustering based on ph in x-axis and sulphates in y axis
+ggplot(wine,aes(pH,sulphates,color=as.factor(cluster)))+geom_point()
+
+#Visualising Clustering based on ph in x-axis and total.sulfur.dioxide in y axis
+ggplot(wine,aes(pH,total.sulfur.dioxide,color=as.factor(cluster)))+geom_point()
+
+#Visualising Clustering based on alcohol in x-axis and sulphates in y axis
+ggplot(wine,aes(alcohol,sulphates,color=as.factor(cluster)))+geom_point()
+
+#Visualising Clustering based on alcohol in x-axis and total.sulfur.dioxide in y axis
+ggplot(wine,aes(alcohol,total.sulfur.dioxide,color=as.factor(cluster)))+geom_point()
+
+#Visualising Clustering based on alcohol in x-axis and pH in y axis
+ggplot(wine,aes(alcohol,pH,color=as.factor(cluster)))+geom_point()
+
+#Visualising Clustering based on sulphates in x-axis and total.sulfur.dioxide in y axis
+ggplot(wine,aes(sulphates,total.sulfur.dioxide,color=as.factor(cluster)))+geom_point()
+
+#Visualising Clustering based on sulphates in x-axis and pH in y axis
+ggplot(wine,aes(sulphates,pH,color=as.factor(cluster)))+geom_point()
+
+#Visualising Clustering based on sulphates in x-axis and alcohol in y axis
+ggplot(wine,aes(sulphates,alcohol,color=as.factor(cluster)))+geom_point()
+
+
+#Analyzing the cluster with apply so as to view and compare the means of all the four cols
+apply(wine,2,function(x) tapply(x,wine$cluster,mean))
