@@ -179,7 +179,7 @@ wine_std$cluster=fit$cluster
 
 #Visualising clustering based on different fields
 library(ggplot2)
-#Trying diff. combos for clustering 
+#Trying diff. combos for visualising clustering 
 #Visualising Clustering based on ph in x-axis and alcohol in y axis
 ggplot(wine,aes(pH,alcohol,color=as.factor(cluster)))+geom_point()
 
@@ -207,6 +207,6 @@ ggplot(wine,aes(sulphates,pH,color=as.factor(cluster)))+geom_point()
 #Visualising Clustering based on sulphates in x-axis and alcohol in y axis
 ggplot(wine,aes(sulphates,alcohol,color=as.factor(cluster)))+geom_point()
 
-
 #Analyzing the cluster with apply so as to view and compare the means of all the four cols
+#across the clusters
 apply(wine,2,function(x) tapply(x,wine$cluster,mean))
