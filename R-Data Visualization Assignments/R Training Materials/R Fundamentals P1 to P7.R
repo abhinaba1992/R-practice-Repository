@@ -282,8 +282,15 @@ names(df2)[c(1,2)] #to get specifc colnames (way 2)
 names(df2)[c(1:3)] #to get specifc colnames (way 3)
 #another method for getting the column names
 colnames(df2)
+names(df2)[1]# to get specific colnames
+names(df2)[c(1,2)] #to get specifc colnames (way 2)
+names(df2)[c(1:3)] #to get specifc colnames (way 3)
+
 #methodto get the rownames of thev ector
 rownames(df2)
+rownames(df2)[1]# to get specific rows
+rownames(df2)[c(1,2)] #to get specifc rows (way 2)
+rownames(df2)[c(1:3)] #to get specifc rows (way 3)
 #Method to get both row and column names
 dimnames(df2)
 #The following function retruns the count of rows and cols
@@ -524,11 +531,11 @@ quantile(df1$mpg)
 range(df1$mpg)
 
 #---------------------------------------------------------------------------------------------------
-  
+
 #Following functions are used for showing multiple univariate values at a time
 #Summary, We can choose to pass a data frame or a single column to get the result
 #Describe function is also similar to summary, however a lot more matrics are shown for describe
-  
+
 summary(df1)
 #OR
 summary(df1$mpg)
@@ -555,7 +562,7 @@ boxplot(df1$mpg~df1$am)
 #Barplot function is used to vizualise the categorical variables
 barplot(table(df1$am))
 #---------------------------------------------------------------------------------------------------
-  
+
 #Getting the percentage of numerical data in our categorical col
 prop.table(df1$am)
 #OR
@@ -566,7 +573,7 @@ round(prop.table(df1$am),2)
 prop.table(table(df1$am),1)
 
 #---------------------------------------------------------------------------------------------------
-  
+
 #Xtabs function helps us to get the count instead of % age
 xtabs(~mpg,data = df1)
 
@@ -585,7 +592,7 @@ xtabs(~mpg+disp,data=df1)
 xtabs(~mpg+disp,data=df1,1)
 
 #---------------------------------------------------------------------------------------------------
-  
+
 #Margin.table function helps us to see the sum
 #either row wise or column wise
 #Row wise
@@ -598,16 +605,16 @@ margin.table(df1$mpg,2)
 #Add margins help us to append the summation result along with the sum values
 addmargins(table(df1$am),1)
 
-addmargins(table(df1),2)
+addmargins(table(df1$am),2)
 
 
 ftable(df1$mpg)
 
 #---------------------------------------------------------------------------------------------------
-  
+
 #Part 5 [data visualisations with ggplot] (10th Sep 2017)
-  
-  data(mtcars)
+
+data(mtcars)
 df1=mtcars
 
 
@@ -623,9 +630,9 @@ boxplot(df1$mpg~df1$am,col="blue",xlab="transmission",ylab="mileage",main="Mlg V
 #Plotting a mosaic plot for two categorical variables
 mosaicplot(~df1$am+df1$vs)
 
---------------------------------------------------
-  #Exploring the capabilities of ggplot 2
-  library(ggplot2)
+#---------------------------------------------------------------------------------------------------
+#Exploring the capabilities of ggplot 2
+library(ggplot2)
 
 #There are three layers for any gg plot graphs,
 #1.) Data Layer and Aesthetics, 2.) Geometric Layer, 3.) shape, size and color layer
@@ -671,9 +678,9 @@ ggplot(df1,aes(x=wt,y=mpg,color=vs)) + geom_point() + geom_smooth()
 #point function as shown below
 ggplot(df1,aes(x=wt,y=mpg)) + geom_point(aes(color=vs)) + geom_smooth() + geom_line()
 
---------------------------------------------------
-  #bar charts
-  library(vcd)
+#---------------------------------------------------------------------------------------------------
+#bar charts
+library(vcd)
 
 data(Arthritis)
 df3=Arthritis
@@ -738,14 +745,14 @@ ggplot(mydata,aes(x=v1))+geom_density()
 #Passing a scaled param to geom density
 ggplot(mydata,aes(x=v1,fill=dist))+geom_density(aes(y=..scaled..))
 
------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
   
-  #Part 6 [Data Preparation in R] (16th Sep 2017)
+#Part 6 [Data Preparation in R] (16th Sep 2017)
   
-  #The following function is used to get/set the working directory
-  #example
-  #Getting
-  getwd()
+#The following function is used to get/set the working directory
+#example
+#Getting
+getwd()
 #Setting (Way 1)
 setwd("C:\\Users\\Abhinaba\\Downloads")
 #or 
@@ -856,12 +863,12 @@ select(df1,-disp,-hp,-vs)
 #Combining filter with select
 filter(select(df1,mpg,drat),mpg<15)
 
------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
   
-  #Part 7 [Data Prepration in R Continued...] (17th Sep 2017)
+#Part 7 [Data Prepration in R Continued...] (17th Sep 2017)
   
-  #Chaining of methods
-  mtcars %>%  select(mpg,cyl,disp)  %>% filter(mpg>20)
+#Chaining of methods
+mtcars %>%  select(mpg,cyl,disp)  %>% filter(mpg>20)
 #Traditional way
 mtcars[mtcars$mpg>20,c("mpg","cyl","disp")]
 
@@ -910,10 +917,10 @@ y
 xx=c("09-01-01", "09-01-02", "09-01-03")
 yy=ymd(xx)
 yy
--------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
   
-  #The following function can convert a string to a date in the format month-day-year
-  x="09-01-01"
+#The following function can convert a string to a date in the format month-day-year
+x="09-01-01"
 y=mdy(x)
 class(y)
 y
@@ -921,10 +928,10 @@ y
 xx=c("09-01-01", "09-01-02", "09-01-03")
 yy=mdy(xx)
 yy
--------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
   
-  #The following function can convert a string to a date in the format day-month-year
-  x="09-01-01"
+#The following function can convert a string to a date in the format day-month-year
+x="09-01-01"
 y=dmy(x)
 class(y)
 y
@@ -932,18 +939,18 @@ y
 xx=c("09-01-01", "09-01-02", "09-01-03")
 yy=dmy(xx)
 yy
--------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
   
-  #ymd_hms(): this helps us to get a timestamp, it allows us to param 
-  
-  
+#ymd_hms(): this helps us to get a timestamp, it allows us to param 
   
   
   
   
-  # #How to connect to SQL from R
-  # #First we need to create a DSN for ODBC driver in order to connect to SQL.
-  # #We need to first download the driver for ODBC connection to SQL
+  
+  
+# #How to connect to SQL from R
+# #First we need to create a DSN for ODBC driver in order to connect to SQL.
+# #We need to first download the driver for ODBC connection to SQL
 # #Here we have created an ODBC driver connection for our SQL data source and named it DemoData
 #
 #
