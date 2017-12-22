@@ -4,6 +4,7 @@
 
 #Setting the work directory
 setwd("C:/Users/chakrabortyab/Desktop/R Practice/Data")
+#setwd("C:/E drive/Docs/R Practice docs/Data")
 
 #Reading the values
 winedata=read.csv("winequality-red.csv",sep=";")
@@ -38,7 +39,7 @@ t.test(winedata$fixed.acidity,mu=6.10,alternative = "less") #accept
 t.test(winedata$fixed.acidity,mu=6.10,alternative = "greater") #reject
 
 #---------------------------------------------------------------------------------------------------
-  
+
 # Paired T-tests (It is used to compare two different attributes of a common entity or group or comparing a before and 
 # after scenario), we can think of this as comparing two different columns
 # By default the Mu value is 0 for paired t-tests
@@ -51,8 +52,8 @@ t.test(winedata$free.sulfur.dioxide,winedata$total.sulfur.dioxide, paired= TRUE)
 t.test(winedata$free.sulfur.dioxide,winedata$total.sulfur.dioxide, paired= TRUE,mu=0.5)
 
 #---------------------------------------------------------------------------------------------------
-  
-  
+
+
 #Unpaired T-tests (It is used to compare the same attribute for two different entities or groups)
 # you can think that here the comparison happens row wise
 # filtering the alcohol quality entity
@@ -84,7 +85,7 @@ t.test(alcohol_quality3,alcohol_quality7, var.equal = TRUE) # We can specify the
 # used in this scenario.
 # Here the null hypothese is that the difference between means of all categories is equal to 0
 # While alternat hypothese is that the difference between means of all categories is not equal to 0
-  
+
 # Syntax breakdown aov(<numerical data> ~ as.factor(<categorical data>), data = <dataset>)
 fit = aov(alcohol ~ as.factor(quality), data=winedata)
 
@@ -111,8 +112,8 @@ boxplot(winedata$alcohol~winedata$quality)
 # Suppose it is claimed that we have equal proportions of qualities for all types where as for 7 and 8 we have half 
 # proportions, ie; our proportions for 3,4,5,6,7 and 8 and 20%,20%,20%,20%,10% and 10% respectively.
 #  (or 0.20,0.20,0.20,0.20,0.10,0.10)
-  
-  
+
+
 #First we can check for proportions
 table(winedata$quality)
 
