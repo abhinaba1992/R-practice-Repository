@@ -1,3 +1,2 @@
-*.R linguist-language=R
 *.csv linguist-language=csv
 *.txt linguist-language=txt
