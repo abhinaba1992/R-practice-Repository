@@ -30,7 +30,7 @@ cars.std=data.frame(scale(df_cars,center=medians,scale = mads))
 head(cars.std)
 #Now, we found out that columns vs and am are having NAN and INF fields in them, so we may choose to remove those 
 #columns, however here vs and am are alredy dummy datas, so we can exclude them from the standardisation process
-#So we do the exclude them from ur dataset
+#So we do exclude them from ur dataset
 df_cars2=mtcars[,c(1:7,10,11)]
 
 #Calculating the medians of all the columns again (excluding vs and am)
@@ -115,12 +115,12 @@ plot(d,col="mediumturquoise",pch=16,
 #Demonstrating K-means
 mydata=d
 
-#Determine the optimal cluster size based on within sum of square
-#within sum of square is the degrees of freedom * variance of the dataset
+#Determine the optimal cluster size based on "within sum of square" value
+#"within sum of square" is the degrees of freedom * variance of the dataset
 wss=(nrow(mydata)-1)*sum(apply(mydata,2,var))
 
 #Now we are doing the same thing as we did above, but with k-means
-#Here the i in the loop denotes the number of clusters and we iterate through multiple combos (2 to 5 clusters)
+#Here the i in the loop denotes the number of clusters and we iterate through multiple combos (2 to 15 clusters)
 #so as to determine the k-means value for 2 to 15 number of clusters (the loop starts at 2 because the minimum 
 #number of clusters can be 2) 
 for (i in 2:15) wss[i]=sum(kmeans(mydata,centers = i)$withinss)
@@ -143,7 +143,8 @@ ggplot(d,aes(x=cluster))+geom_bar(aes(fill=cluster))
 
 
 #Taking a real time data set to test k-means
-setwd("C:/Users/chakrabortyab/Desktop/R Practice/Data")
+#setwd("C:/Users/chakrabortyab/Desktop/R Practice/Data")
+setwd("C:/E drive/Docs/R Practice docs")
 
 wine=read.csv("winequality-red.csv",sep=";")
 
