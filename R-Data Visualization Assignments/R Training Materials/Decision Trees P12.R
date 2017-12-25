@@ -175,7 +175,7 @@ rmse_train
 rmse_test
 
 
-#Now, we need to do a pruning followed by a cross validation
+#Now, we need to do a cross validation followed by a pruning
 #So, Doing cross validation to for the same
 set.seed(4)
 cv.rt.carseats=cv.tree(rt.carseats)
@@ -183,14 +183,14 @@ cv.rt.carseats=cv.tree(rt.carseats)
 #Now, we are plotting the same for us to find the number bracnhes to prune
 plot(cv.rt.carseats$size,cv.rt.carseats$dev,type="b")
 
-#So, from the above plotm we found out that we need prune the tree at 6
-prune.rt.carseats=prune.tree(rt.carseats,best=6)
+#So, from the above plotm we found out that we need prune the tree at 7
+prune.rt.carseats=prune.tree(rt.carseats,best=7)
 
 #Plotting the same
 plot(prune.rt.carseats)
 text(prune.rt.carseats,pretty=0)
 
-#Predicting the values
+#Predicting the values for train and test data
 sales_pred_train=predict(prune.rt.carseats,newdata=carseats_train)
 sales_pred_test=predict(prune.rt.carseats,newdata=carseats_test)
 
