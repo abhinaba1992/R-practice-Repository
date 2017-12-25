@@ -28,11 +28,11 @@ tree.carseats=tree(High~.,data=mysales)
 plot(tree.carseats)
 
 #Plotting the texts in the decision tree, the yes will always be on the left while the no will always
-#be on the right
+#be on the right, pretty is an attribute for beautification and cex means the text size
 text(tree.carseats,pretty=0,cex=0.5)
 
 
-#It may also happen that the variable/column on based on which the gini index has to be calculated turns
+#It may also happen that the variable/column based on which the gini index has to be calculated turns
 #out to be a numerical variable; in that case all the variables in that range are compared in a lower
 #than and greater than scenario so as to find the best possible index [Decision trees, 5th Nov, 1:20:10]
 
@@ -63,7 +63,7 @@ table(Actual_Values,predicted_values)
 #Now, We are streamliing/Extending the above piece of code in a much more organised way, as in we would 
 #be following all the steps one by one that we did for linear/logistic regression
 
-#---------------------------------------------------------------------------------------------------
+
 # 1. Splitting the data into train ad test
 set.seed(2)
 train=sample(1:nrow(mysales),200) # We could have also written train=sample(1:nrow(mysales),0.50*nrow(mysales))
@@ -88,10 +88,16 @@ tree.orgi.test=mysales_test$High
 
 #---------------------------------------------------------------------------------------------------
 
-# 5. Visualising the confusion matrix
+# 5. Visualising the confusion matrix for the test data
 table(tree.orgi.test,tree.pred.test)
 #So from the above line, we get 16 misclassifications out of 200 variables, thus our misclassification
 #rate is 16/200 which is 0.08 or 8 % misclassification, so we can conclude that this is a good model
+
+# 6. plotting the same from the test data
+plot(tree.carseats)
+text(tree.carseats,pretty=0,cex=0.5)
+
+#---------------------------------------------------------------------------------------------------
 
 #Sometimes, it may also happen that we get a very high value for misclassification for our test data,
 #this is because in decision tress, the algorithm  tries to generalise the eqn. too much on the train
@@ -103,7 +109,8 @@ table(tree.orgi.test,tree.pred.test)
 #So pruning helps us to make sure that our model is performing well on the test data or any other sample
 #data other than the one in which it is trained, it basically cuts down our tree
 
-#In order to do pruning, we need to first do a cross validation
+#In order to do pruning, we need to first do a cross validation, we use the function cv.tree for doing
+#cross validation
 set.seed(3)
 cv.carseats=cv.tree(tree.carseats,FUN=prune.misclass)
 
@@ -113,7 +120,7 @@ plot(cv.carseats$size,cv.carseats$dev,type="b")
 #From the above eqn. we can find that pruning would need to be done at 16 since it starts to increase
 #back from 16
 
-#So we are pruning at 16
+#So we are pruning at 16, so basically this means that we would have 16 terminal nodes
 prune.carseats=prune.misclass(tree.carseats,best=16)
 
 plot(tree.carseats)
@@ -176,7 +183,7 @@ cv.rt.carseats=cv.tree(rt.carseats)
 #Now, we are plotting the same for us to find the number bracnhes to prune
 plot(cv.rt.carseats$size,cv.rt.carseats$dev,type="b")
 
-#So, from the above plotm we found out that we need prune the tree at 7
+#So, from the above plotm we found out that we need prune the tree at 6
 prune.rt.carseats=prune.tree(rt.carseats,best=6)
 
 #Plotting the same
