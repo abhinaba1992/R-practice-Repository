@@ -158,7 +158,7 @@ text(rt.carseats,pretty=0,cex=0.8)
 #Predicting the values
 sales_pred_train=predict(rt.carseats,newdata=carseats_train)
 sales_pred_test=predict(rt.carseats,newdata=carseats_test)
-  
+
 #In case of regression using decision trees, when we apply our eqn./model in an unknown data set, the values
 #based on which our model is trained remain fixed, so for example if in one of the branches the criteria 
 #for decision making is (Price<132.5) as per the train data set, then even in an unknown data set, the 
@@ -200,3 +200,36 @@ rmse_test=sqrt(mean((sales_pred_test-carseats_train$Sales)^2))
 
 rmse_train
 rmse_test
+
+
+#Random Forest
+library(randomForest) #Package for using the random forest function
+
+#Applying random forest function, do.trace would help to capture the output on the run, so it will show how many trees
+#are getting created and other random forest related metrics
+
+class_rf=randomForest(High~.,data=mysales_train,do.trace=T)
+#So from the above code, we can see the trace and conclude that 500 trees has been ran
+#So we would get a OOB value or error value, along with the errors of the category value 1 and value 2
+
+class_rf
+#IF we run the above piece of code, we would get many matrices
+#Now, since this is a classification problem, the number of variables that would be used for each split would be 
+#Sqrt(11) where 11 is the no. of cols in the data set, which is equal to 3.31, hence rounded off to 3
+#We would also see OOB estmate error, which is nothing but the avg. of error or OOB across all the 500 trees
+#Created in this scenario. also we can see the confusion matrix along with the misclassification percentage
+
+
+#Predicting the values
+forest.pred=predict(class_rf,newdata = mysales_test)
+table(mysales_test$High,forest.pred)
+
+
+
+#Calculating importance
+abc=importance(class_rf)
+#OR
+sort(abc,decreasing=T)
+
+
+
