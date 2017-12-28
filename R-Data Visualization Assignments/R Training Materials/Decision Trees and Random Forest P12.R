@@ -11,12 +11,12 @@ library(dplyr)
 View(Carseats)
 
 #This is a classification problem where our target variable is sales
-#However we do not have a benchmar or bound for classification here as sales is a continuous data
+#However we do not have a benchmark or bound for classification here as sales is a continuous data
 #Lets assume that the customer has said that 8 is the benchmark for sales figure, that is anything
 #above 8 is "yes" and anything less than or equal to 8 is "No", therefore
 #Also, note that unlike logistic regression, classification in decision trees has to be done on a
 #variable of type factor, on the flip side if the data type of the target variable is a factor
-#so the machine understands that this is going to be in decision trees
+#so the machine understands that the model is going to be done using a decision trees
 mysales=Carseats %>% mutate(High=as.factor(ifelse(Sales<=8,"No","Yes"))) %>% select(-Sales)
 View(mysales)
 
@@ -245,7 +245,31 @@ ld_test=mysales[-train,]
 
 #Running the random forest for linear regression (This part is yet to be completed)
 setwd("C:/Users/chakrabortyab/Desktop/R Practice/Data")
-loandata=read.csv("loans data.csv")
+loandata=read.csv("loans data.csv",stringsAsFactors = F)
+
+#Taking a glimpse of the data loan data
+glimpse(loandata) #You can also view the data using the function: View(loandata)
+#Checking the data type of the target variable
+class(loandata$Interest.Rate)
+#We found out that the data type of the target variable is factor
+
+#Converting the target variable Interest rate to an integer or continuous variable because this is a regression
+#problem and not a classification problem, we are also converting some of the other variables
+loandata=loandata %>% mutate(Interest.Rate=as.numeric(gsub("%","",Interest.Rate)),
+                                Debt.To.Income.Ratio=as.numeric(gsub("%","",Debt.To.Income.Ratio)),
+                                Open.CREDIT.Lines=as.numeric(Open.CREDIT.Lines),
+                                Amount.Requested=as.numeric(Amount.Requested),
+                                Amount.Funded.By.Investors=as.numeric(Amount.Funded.By.Investors),
+                                Revolving.CREDIT.Balance=as.numeric(Revolving.CREDIT.Balance))
+
+#Checking the number of NAs taht were generated because of coercion
+apply(loandata,2,function(x) sum(is.na(x)))
+
+#Removing the NAs that were generated because of coercion
+loandata=loandata %>% na.omit()
+
+#Verifying the number of NAs again
+apply(loandata,2,function(x) sum(is.na(x)))
 
 #Splitting the data into train and test
 set.seed(3)
@@ -253,18 +277,21 @@ train=sample(1:nrow(loandata),200) # We could have also written train=sample(1:n
 ld_train=loandata[train,]
 ld_test=loandata[-train,]
 
+#Verifying the data type of the target variable again in the train and test data set
+class(ld_train$Interest.Rate)
+class(ld_test$Interest.Rate)
+
 
 #Running the decision tree so as to predict the values (The below function needs to be done after the variable 
 #treatment or data preparation step)
 rt.loandata=tree(Interest.Rate~.,data=ld_train)
 
 #Predicting the values for train and test data
-ld_pred_train=predict(rt.carseats,newdata=ld_train)
-ld_pred_test=predict(rt.carseats,newdata=ld_test)
+ld_pred_train=predict(rt.loandata,newdata=ld_train)
+ld_pred_test=predict(rt.loandata,newdata=ld_test)
 
 #Finding the values through random forest
-rf_ld=randomForest(High~.-ID-State,data=ld_train) #have disabled trace for this
-
+rf_ld=randomForest(Interest.Rate~.-ID-State,data=ld_train) #have disabled trace for this
 
 #We cna see the importance and plot for rf_ld after this
 #Calculating importance
