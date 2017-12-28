@@ -136,7 +136,7 @@ table(tree.orgi.test,tree.pred.test)
 
 #---------------------------------------------------------------------------------------------------
 
-#DOING REGRESSION ON DECISION TREES
+#DOING REGRESSION WITH DECISION TREES
 
 #Like we get Yes/No in a classification problem through decision trees, we would get a average value
 # of our target variable in case of performing a regression, where as in the classification problem
@@ -202,7 +202,7 @@ rmse_train
 rmse_test
 
 
-#Random Forest
+#RANDOM FOREST
 library(randomForest) #Package for using the random forest function
 
 #Applying random forest function, do.trace would help to capture the output on the run, so it will show how many trees
@@ -229,7 +229,45 @@ table(mysales_test$High,forest.pred)
 #Calculating importance
 abc=importance(class_rf)
 #OR
-sort(abc,decreasing=T)
+abc[order(abc[,1],decreasing=T),] #Here we are doing a sort in order to check the variable with highest importance
 
 
+#We can alos try and plot the same for better visualising the importance
+varImpPlot(class_rf)
 
+
+#Splitting the data into train and test
+set.seed(4)
+train=sample(1:nrow(mysales),200) # We could have also written train=sample(1:nrow(mysales),0.50*nrow(mysales))
+ld_train=mysales[train,]
+ld_test=mysales[-train,]
+
+
+#Running the random forest for linear regression (This part is yet to be completed)
+setwd("C:/Users/chakrabortyab/Desktop/R Practice/Data")
+loandata=read.csv("loans data.csv")
+
+#Splitting the data into train and test
+set.seed(3)
+train=sample(1:nrow(loandata),200) # We could have also written train=sample(1:nrow(mysales),0.50*nrow(mysales))
+ld_train=loandata[train,]
+ld_test=loandata[-train,]
+
+
+#Running the decision tree so as to predict the values (The below function needs to be done after the variable 
+#treatment or data preparation step)
+rt.loandata=tree(Interest.Rate~.,data=ld_train)
+
+#Predicting the values for train and test data
+ld_pred_train=predict(rt.carseats,newdata=ld_train)
+ld_pred_test=predict(rt.carseats,newdata=ld_test)
+
+#Finding the values through random forest
+rf_ld=randomForest(High~.-ID-State,data=ld_train) #have disabled trace for this
+
+
+#We cna see the importance and plot for rf_ld after this
+#Calculating importance
+def=importance(rf_ld)
+#OR
+def[order(def[,1],decreasing=T),] #Here we are doing a sort in order to check the variable with highest importance
