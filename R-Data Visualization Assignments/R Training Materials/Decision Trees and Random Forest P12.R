@@ -183,7 +183,7 @@ cv.rt.carseats=cv.tree(rt.carseats)
 #Now, we are plotting the same for us to find the number bracnhes to prune
 plot(cv.rt.carseats$size,cv.rt.carseats$dev,type="b")
 
-#So, from the above plotm we found out that we need prune the tree at 7
+#So, from the above plot we found out that we need prune the tree at 7
 prune.rt.carseats=prune.tree(rt.carseats,best=7)
 
 #Plotting the same
@@ -210,7 +210,7 @@ library(randomForest) #Package for using the random forest function
 
 class_rf=randomForest(High~.,data=mysales_train,do.trace=T)
 #So from the above code, we can see the trace and conclude that 500 trees has been ran
-#So we would get a OOB value or error value, along with the errors of the category value 1 and value 2
+#So we would get a OOB value or error value, along with the errors of the category value 1 and value 0
 
 class_rf
 #IF we run the above piece of code, we would get many matrices
@@ -235,12 +235,6 @@ abc[order(abc[,1],decreasing=T),] #Here we are doing a sort in order to check th
 #We can alos try and plot the same for better visualising the importance
 varImpPlot(class_rf)
 
-
-#Splitting the data into train and test
-set.seed(4)
-train=sample(1:nrow(mysales),200) # We could have also written train=sample(1:nrow(mysales),0.50*nrow(mysales))
-ld_train=mysales[train,]
-ld_test=mysales[-train,]
 
 
 #Running the random forest for linear regression (This part is yet to be completed)
