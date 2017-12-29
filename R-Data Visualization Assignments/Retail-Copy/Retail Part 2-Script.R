@@ -1,5 +1,7 @@
 #Retail project (Using random forest for the same)
 #Classification problem
+#AUTHOR: Abhinaba Chakraborty
+#LAST MODIFIED: 29th Dec 2017
 
 # 1. ENVIRONMENT SETUP
 
