@@ -203,7 +203,7 @@ rmse_test
 
 #-----------------------------------------------------------------------------------------------------
 
-#RANDOM FOREST
+# RANDOM FOREST FOR CLASSIFICATION
 library(randomForest) #Package for using the random forest function
 
 #Applying random forest function, do.trace would help to capture the output on the run, so it will show how many trees
@@ -238,7 +238,7 @@ varImpPlot(class_rf)
 
 #-----------------------------------------------------------------------------------------------------
 
-# RUNNING RANDOM FOREST FOR LINEAR REGRESSION (This part is yet to be completed)
+# RUNNING RANDOM FOREST FOR REGRESSION (This part is yet to be completed)
 setwd("C:/Users/chakrabortyab/Desktop/R Practice/Data")
 loandata=read.csv("loans data.csv",stringsAsFactors = F)
 
