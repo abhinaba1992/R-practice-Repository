@@ -1,6 +1,6 @@
 #This piece of R-Script helps us to demonstrate decision trees
 #Author: Abhinaba Chakraborty
-
+#Last modified: 29th Dec 2017
 
 #We would need the following package for decision trees
 library(tree) #Contains the function to be used for decision trees
@@ -237,7 +237,7 @@ varImpPlot(class_rf)
 
 
 
-#Running the random forest for linear regression (This part is yet to be completed)
+# RUNNING RANDOM FOREST FOR LINEAR REGRESSION (This part is yet to be completed)
 setwd("C:/Users/chakrabortyab/Desktop/R Practice/Data")
 loandata=read.csv("loans data.csv",stringsAsFactors = F)
 
@@ -250,11 +250,11 @@ class(loandata$Interest.Rate)
 #Converting the target variable Interest rate to an integer or continuous variable because this is a regression
 #problem and not a classification problem, we are also converting some of the other variables
 loandata=loandata %>% mutate(Interest.Rate=as.numeric(gsub("%","",Interest.Rate)),
-                                Debt.To.Income.Ratio=as.numeric(gsub("%","",Debt.To.Income.Ratio)),
-                                Open.CREDIT.Lines=as.numeric(Open.CREDIT.Lines),
-                                Amount.Requested=as.numeric(Amount.Requested),
-                                Amount.Funded.By.Investors=as.numeric(Amount.Funded.By.Investors),
-                                Revolving.CREDIT.Balance=as.numeric(Revolving.CREDIT.Balance))
+                             Debt.To.Income.Ratio=as.numeric(gsub("%","",Debt.To.Income.Ratio)),
+                             Open.CREDIT.Lines=as.numeric(Open.CREDIT.Lines),
+                             Amount.Requested=as.numeric(Amount.Requested),
+                             Amount.Funded.By.Investors=as.numeric(Amount.Funded.By.Investors),
+                             Revolving.CREDIT.Balance=as.numeric(Revolving.CREDIT.Balance))
 
 #Checking the number of NAs taht were generated because of coercion
 apply(loandata,2,function(x) sum(is.na(x)))
