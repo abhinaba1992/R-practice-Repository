@@ -14,7 +14,6 @@ library(pROC) #To draw an area under the curve
 
 
 #Setting the working directory
-#setwd("C:/Users/chakrabortyab/Desktop/R Practice/Data")
 setwd("C:/Users/Abhinaba/Desktop/Edvancer Materials/Project/R Projects/Retail-Copy")
 
 #Loading data from file
@@ -35,16 +34,17 @@ class(retail_data_Clean$store)
 
 #Checking if any columns contain NAs
 apply(retail_data,2,function(x) sum(is.na(x)))
-#Thus by running the above query we can conclude that there is one NA value for our column 
+#Thus by running the above query we can conclude that there is one NA value for our column population
 
-#removing the NA field from pupulation
+#removing the NA field from column population
 retail_data_Clean=retail_data_Clean %>% na.omit()
 
-#Verifying the removal of all NAs fro mour code
+#Verifying the removal of all NAs from mour dataset
 apply(retail_data_Clean,2,function(x) sum(is.na(x)))
 
 
-#Removing the location related variables
+#Removing the location related variables as it's a best practice not to include the location related
+#variables
 retail_data_Clean=retail_data_Clean %>% select(-countyname,-storecode,-Areaname,-countytownname,
                                                -state_alpha,-store_Type)
 
@@ -61,16 +61,14 @@ Retail_train=retail_data_Clean[retail_clnData,]
 Retail_test=retail_data_Clean[-retail_clnData,]
 
 
-# 4. TRAINING THE RANDOM FOREST EQN.
+# 4. TRAINING THE RANDOM FOREST EQN. ON OUR TRAIN DATA SET
 #We are removing the location related variables as we do not usually include them as a best practice measure
 class_rf=randomForest(store~.,data=Retail_train,do.trace=T)
-
 
 #Visualising the random forest
 class_rf
 
-# 5. APPLYING RANDOM FOREST TO GET THE SCORE OR PROBABILITY
-
+# 5. APPLYING RANDOM FOREST TO GET THE SCORE OR PROBABILITY IN OUR TRAIN DATA
 Retail_train$score=predict(class_rf,newdata= Retail_train, type="prob")[,1]
 
 # 6. FINDING THE MATRICES FOR VALIDATION
@@ -96,11 +94,11 @@ cutoff_data=cutoff_data[-1,]
 
 
 #We are now creating all the matrix like sensitivity, specificity, accuracy, distance,
-#lift, KS, user defined matrix etc
+#lift, KS etc for analysis
 cutoff_data=cutoff_data %>%
   mutate(P=FN+TP,N=TN+FP,Sn=TP/P, Sp=TN/N,
          dist=sqrt((1-Sn)**2+(1-Sp)**2)
-         ) %>%
+  ) %>%
   mutate(KS=abs((TP/P)-(FP/N))) %>%
   mutate(Accuracy=(TP+TN)/(P+N)) %>%
   mutate(Lift=(TP/P)/((TP+FP)/(P+N))) %>%
@@ -110,32 +108,20 @@ cutoff_data=cutoff_data %>%
 View(cutoff_data)
 
 
-#Now we are converting the wide format into long format so that we can plot those details
-
-cutoff_viz=cutoff_data %>%
-  select(cutoff,Sn,Sp,dist,KS,Accuracy,Lift) %>%
-  gather(Criterion,Value,Sn:Lift) #here gather is used for the conversion from wide to long format
-
-
-#Plotting the graph
-ggplot(filter(cutoff_viz,Criterion!="Lift"),aes(x=cutoff,y=Value,color=Criterion))+geom_line()
-
-
 #Now, since we decided we are going to get the cutoff with max KS, WE do the following
-
 KS_cutoff=cutoff_data$cutoff[which.max(cutoff_data$KS)][1]
 KS_cutoff
 #From above we get the cutoff is 0.525
 
 
-# 7. DRAWING THE ROC CURVE
+# 7. PLOTTING THE ROC CURVE
 roccurve=roc(Retail_train$store,Retail_train$score)
 
 #plotting the ROC curve
 plot(roccurve)
 
 #Area under the curver
-auc(roccurve) #We get a 99% AUC value for our data
+auc(roccurve) #We get a 99% AUC value for our train data
 
 
 # 8. SEEING IMPORTANCE TO SEE THE VARIABE IMPORTANCE
@@ -146,7 +132,7 @@ Retail_data_imp[order(Retail_data_imp[,1],decreasing=T),]
 varImpPlot(class_rf)
 
 
-# 9. PREDICTING THE VALUE FOR TEST DATA
+# 9. PREDICTING THE VALUE FOR OUR SAMPLE TEST DATA
 Retail_test$score=predict(class_rf,newdata= Retail_test, type="prob")[,1]
 
 #Visualising the confusion matrix for the test data
@@ -173,7 +159,7 @@ retail_data_test_org_Clean=retail_data_test_org %>% na.omit()
 #Verifying the removal of all NAs from our code
 apply(retail_data_test_org_Clean,2,function(x) sum(is.na(x)))
 
-#Having an original copy for the same
+#Having an original copy for the same so that we can later append the predicted scores
 retail_data_test_org_Final=retail_data_test_org_Clean
 
 #Removing the location oriented variables from the data set
@@ -183,13 +169,13 @@ retail_data_test_org_Clean=retail_data_test_org_Clean %>% select(-countyname,-st
 #Checking the score
 retail_data_test_org_Clean$score=predict(class_rf,newdata= retail_data_test_org_Clean, type="prob")[,1]
 
-#Now, our cutoff is 0.525, therefore
+#Now, our cutoff is 0.525 as per the KS value, therefore the prediction would be
 retail_data_test_org_Clean=retail_data_test_org_Clean %>% mutate(prediction=ifelse(score>0.525,"1","0"))
 
 #Appending the Score and prediction column with the original data set
-retail_data_test_org_Clean$score=retail_data_test_org_Clean$score
-retail_data_test_org_Clean$prediction=retail_data_test_org_Clean$prediction
+retail_data_test_org_Final$score=retail_data_test_org_Clean$score
+retail_data_test_org_Final$prediction=retail_data_test_org_Clean$prediction
 
 
 #Writing it to the directory
-write.csv(retail_data_test_org_Clean,"retail-full_test_with_Predicted_Values.csv")
+write.csv(retail_data_test_org_Final,"retail-full_test_with_Predicted_Values.csv")
