@@ -201,6 +201,7 @@ rmse_test=sqrt(mean((sales_pred_test-carseats_train$Sales)^2))
 rmse_train
 rmse_test
 
+#-----------------------------------------------------------------------------------------------------
 
 #RANDOM FOREST
 library(randomForest) #Package for using the random forest function
@@ -235,7 +236,7 @@ abc[order(abc[,1],decreasing=T),] #Here we are doing a sort in order to check th
 #We can alos try and plot the same for better visualising the importance
 varImpPlot(class_rf)
 
-
+#-----------------------------------------------------------------------------------------------------
 
 # RUNNING RANDOM FOREST FOR LINEAR REGRESSION (This part is yet to be completed)
 setwd("C:/Users/chakrabortyab/Desktop/R Practice/Data")
