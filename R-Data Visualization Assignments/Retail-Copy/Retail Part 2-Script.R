@@ -149,18 +149,26 @@ auc(roccurve_test) #We get a 81% AUC value for our sample test data
 
 # 9. TESTING UPON THE ORIGINAL TEST DATA
 retail_data_test_org=read.csv("store_test.csv")
+nrow(retail_data_test_org)
 
+#We need not remove the NAs from the original test data as it may cause data loss
+#Code from line 155 to 165 is not used in this case
+#{
 #Checking if any NAs are present in our original test dataset
 apply(retail_data_test_org,2,function(x) sum(is.na(x)))
 
-#removing the NA field from pupulation
+#removing the NA field from population
 retail_data_test_org_Clean=retail_data_test_org %>% na.omit()
 
 #Verifying the removal of all NAs from our code
 apply(retail_data_test_org_Clean,2,function(x) sum(is.na(x)))
+#}
+
 
 #Having an original copy for the same so that we can later append the predicted scores
 retail_data_test_org_Final=retail_data_test_org_Clean
+
+
 
 #Removing the location oriented variables from the data set
 retail_data_test_org_Clean=retail_data_test_org_Clean %>% select(-countyname,-storecode,-Areaname,
@@ -177,5 +185,10 @@ retail_data_test_org_Final$score=retail_data_test_org_Clean$score
 retail_data_test_org_Final$prediction=retail_data_test_org_Clean$prediction
 
 
+#Creating the column y for the same
+score=retail_data_test_org_Final$prediction
+dataframe_result_final=data.frame(score)
+
+
 #Writing it to the directory
-write.csv(retail_data_test_org_Final,"retail-full_test_with_Predicted_Values.csv")
+write.csv(dataframe_result_final,"Abhinaba_Chakraborty_P2_part2.csv")
