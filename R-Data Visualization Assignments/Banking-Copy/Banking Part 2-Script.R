@@ -266,7 +266,7 @@ fit1=glm(bi_y ~ balance + duration + campaign + pdays + jb1 + jb2 +
 
 summary(fit1)
 
-#Now, all the variables with less probability are removed now and we have a clean model.
+#Now, all the variables with less probability are removed and we have a clean model.
 
 
 #-----------------------------------------------------------------------------------------------------------
@@ -492,8 +492,12 @@ View(trmdepdata_Test_DS)
 trmdepdata_Test_DS_Orgi$score=trmdepdata_Test_DS$score
 trmdepdata_Test_DS_Orgi$prediction=trmdepdata_Test_DS$prediction
 
+#Creating the column y for the same
+y=trmdepdata_Test_DS_Orgi$prediction
+dataframe_result_final=data.frame(y)
+
 #Viewing the files
 View(trmdepdata_Test_DS_Orgi)
 
 #Writing it to the directory
-write.csv(trmdepdata_Test_DS_Orgi,"bank-full_test_with_Predicted_Values.csv")
+write.csv(dataframe_result_final,"Abhinaba_Chakraborty_P5_part2.csv")
