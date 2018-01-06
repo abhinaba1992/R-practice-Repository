@@ -2,7 +2,7 @@
 #based on past data soas to predict which customers are going togo for a term deposit basedon their charectaristics
 
 #Author: Abhinaba Chakraborty
-#Date: 9th December 2017
+#Date: 6th January 2018
 
 #Including all the packages we need
 library(dplyr) #used for functions like mutate, select, filter, arrange, summarise etc
@@ -482,7 +482,7 @@ glimpse(trmdepdata_Test_DS)
 trmdepdata_Test_DS$score=predict(fit1,newdata = trmdepdata_Test_DS,type = "response")
 
 #Now, our cutoff is 0.101, therefore
-trmdepdata_Test_DS=trmdepdata_Test_DS %>% mutate(prediction=ifelse(score>0.101,"y","n"))
+trmdepdata_Test_DS=trmdepdata_Test_DS %>% mutate(prediction=ifelse(score>0.101,"yes","no"))
 
 #Viewing the same
 View(trmdepdata_Test_DS)
@@ -498,6 +498,9 @@ dataframe_result_final=data.frame(y)
 
 #Viewing the files
 View(trmdepdata_Test_DS_Orgi)
+#Viewing the data set that has to be written
+View(dataframe_result_final)
+
 
 #Writing it to the directory
-write.csv(dataframe_result_final,"Abhinaba_Chakraborty_P5_part2.csv")
+write.csv(dataframe_result_final,"Abhinaba_Chakraborty_P5_part2.csv",row.names=FALSE)
