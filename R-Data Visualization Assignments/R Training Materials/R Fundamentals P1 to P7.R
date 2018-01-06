@@ -1,6 +1,6 @@
 #This portion covers the concepts of R basics, data visualisation in R, data preparation in R and  univariate statistics
 #Author: Abhinaba Chakraborty
-#last Updated: 15.12.2017
+#last Updated: 06.01.2018
 
 #dplyr: used for joins, also functions like mutate, select, filter, arrange, summarise and other data preparation functions.
 #psych : contains the describe function
@@ -904,7 +904,7 @@ library(lubridate)
 
 #The following function can convert a string to a date in the format year-month-day / month-day-year / day-month-year
 #NOTE:  when we use any of the below functions such as ymd, mdy or dmy, the function actually assumes that the string 
-# date is in that format which states in the function name and it's not responsible to make the string date look as 
+#date is in that format which states in the function name and it's not responsible to make the string date look as 
 #the format states in the function 
 
 
@@ -941,13 +941,142 @@ yy=dmy(xx)
 yy
 #---------------------------------------------------------------------------------------------------
   
-#ymd_hms(): this helps us to get a timestamp, it allows us to param 
-  
-  
-  
-  
-  
-  
+#ymd_hms(): this helps us to set a timestamp for a particular area or zone,
+#it allows us to pass a param named "tz" that helps us to pass the timezone 
+#and set a time for a time zone.
+#e.g.
+sample_timstmp="2011-09-26 12:10:09"
+
+#you can pass a time stamp and a time zone in order represent a particular date for time zone
+#e.g. 1 (BST)
+gbt=ymd_hms(sample_timstmp,tz="Europe/London")
+
+#e.g. 2 (NZDT)
+nzdt=ymd_hms(sample_timstmp,tz="Pacific/Auckland")
+
+#e.g. 3 (IST)
+ist=ymd_hms(sample_timstmp,tz="Asia/Calcutta")
+
+
+#---------------------------------------------------------------------------------------------------
+
+#We are now extracting/setting the time components data
+#therefore
+#getting/setting seconds
+#get
+second(gbt)
+#alternatively, we can alos set the value of seconds
+second(gbt)=25
+gbt
+
+
+#getting or setting weekday
+#get
+wday(gbt)#if we just want the number
+wday(gbt,label = TRUE) #If we want the date label
+#set
+wday(gbt)=1
+gbt
+
+#getting or setting quarter
+#get
+quarter(gbt)
+#SETTING A QUARTER IS NOT POSSIBLE BECAUSE THE WHOLE DATE CANNOT BECAUSE THE MONTH/DAY/YEAR CANNOT BE SET
+#USING THE SAME
+
+
+#getting or setting day of the day
+#get
+day(gbt)
+#set
+day(gbt)=26
+gbt
+
+#getting or setting day of the month
+#get
+month(gbt)
+#set
+month(gbt)=8
+gbt
+
+
+#---------------------------------------------------------------------------------------------------
+#We would now be using the function with_tz to convert our date to a diff. time zone
+#Say for example we set a time in IST
+ist=ymd_hms(sample_timstmp,tz="Asia/Calcutta")
+
+#We want to the American equivalent of the same, we do the following
+z=with_tz(ist,"America/Chicago")
+z
+
+#Check if a year is a leap year or not, returns a boolean result
+leap_year(ist)
+
+#---------------------------------------------------------------------------------------------------
+#Date manipulations
+#adds 365 days to a date
+#adding 365X12=4380 days here
+ymd(20110908) + dyears(12) 
+
+#Add exactly one year
+#adding 12X1=12 years 12 here
+ymd(20110908) + years(12)
+
+#Adding months
+ymd(20110908) + months(3)
+
+#Adding days
+ymd(20110908) + days(30)
+
+
+#---------------------------------------------------------------------------------------------------
+
+#Date format parsing
+#notations
+#---------------------------------------------------------------
+#d = two digit date
+#Y = two digit year
+#y = four digit year
+#m = month in numbers
+#b = abbreviated month name
+#B = Complete month name
+#p = for am or pm
+#%H:%M = time in 24 hours
+#%I:%M = time in 12 hour format, this should be accompanied by P
+#---------------------------------------------------------------
+
+
+#We use the function parse_date_time to represent the date in a format, we can also use the function
+#format(). However, we should know what to use when it since this is a two step process.
+#first we need to make R undersatnd the format of a date field if its not already of a date type
+#and in order to do so, we use parse_date_time function
+#and if we want to show a particular date field in a specific format, we use format function 
+
+#parse date time example
+#e.g. 1
+pdt=parse_date_time("01-12-Sep","%d-%y-%b")
+#e.g. 2
+pdt2=parse_date_time("2012-01-January 10:05 PM","%Y-%d-%B %I:%M %p")
+#Now, we have made R understand how its supposed to interpret the string dates
+
+#So, now we are showing it in the format we want using the format function
+#e.g.1
+#say, we want to show it in dd/mm/yyyy format
+format(pdt,"%d/%m/%y")
+#e.g.2
+#say, we want to show it in mmm-dd-yy format
+format(pdt2,"%b-%d-%Y")
+
+#Handling multiple days vector
+x=c("09-01-01","12-01-25","06-05-22")
+parse_date_time(x,"%y%m%d")
+
+
+#-----------------------------------END OF PART 7 & R FUNDAMENTALS----------------------------------
+
+
+#Extra practice
+
 # #How to connect to SQL from R
 # #First we need to create a DSN for ODBC driver in order to connect to SQL.
 # #We need to first download the driver for ODBC connection to SQL
