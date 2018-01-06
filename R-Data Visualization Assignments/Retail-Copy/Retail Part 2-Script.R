@@ -1,7 +1,7 @@
 #Retail project (Using random forest for the same)
 #Classification problem
 #AUTHOR: Abhinaba Chakraborty
-#LAST MODIFIED: 29th Dec 2017
+#LAST MODIFIED: 6th January 2018
 
 # 1. ENVIRONMENT SETUP
 
@@ -124,7 +124,7 @@ plot(roccurve)
 auc(roccurve) #We get a 99% AUC value for our train data
 
 
-# 8. SEEING IMPORTANCE TO SEE THE VARIABE IMPORTANCE
+# 8. SEEING IMPORTANCE TO SEE THE VARIABLE IMPORTANCE
 Retail_data_imp=importance(class_rf)
 Retail_data_imp[order(Retail_data_imp[,1],decreasing=T),]
 
@@ -151,7 +151,8 @@ auc(roccurve_test) #We get a 81% AUC value for our sample test data
 retail_data_test_org=read.csv("store_test.csv")
 nrow(retail_data_test_org)
 
-#We need not remove the NAs from the original test data as it may cause data loss
+#We need not remove the NAs from the original test data, however we are not doing the
+#same here as it may cause data loss
 #Code from line 155 to 165 is not used in this case
 #{
 #Checking if any NAs are present in our original test dataset
@@ -166,29 +167,30 @@ apply(retail_data_test_org_Clean,2,function(x) sum(is.na(x)))
 
 
 #Having an original copy for the same so that we can later append the predicted scores
-retail_data_test_org_Final=retail_data_test_org_Clean
+#retail_data_test_org_Final=retail_data_test_org_Clean
+retail_data_test_org_Final=retail_data_test_org
 
 
 
 #Removing the location oriented variables from the data set
-retail_data_test_org_Clean=retail_data_test_org_Clean %>% select(-countyname,-storecode,-Areaname,
+retail_data_test_org=retail_data_test_org %>% select(-countyname,-storecode,-Areaname,
                                                                  -countytownname,-state_alpha,-store_Type)
 
 #Checking the score
-retail_data_test_org_Clean$score=predict(class_rf,newdata= retail_data_test_org_Clean, type="prob")[,1]
+retail_data_test_org$score=predict(class_rf,newdata= retail_data_test_org, type="prob")[,1]
 
 #Now, our cutoff is 0.525 as per the KS value, therefore the prediction would be
-retail_data_test_org_Clean=retail_data_test_org_Clean %>% mutate(prediction=ifelse(score>0.525,"1","0"))
+retail_data_test_org$pred=retail_data_test_org %>% mutate(prediction=ifelse(score>0.525,"1","0"))
 
 #Appending the Score and prediction column with the original data set
-retail_data_test_org_Final$score=retail_data_test_org_Clean$score
-retail_data_test_org_Final$prediction=retail_data_test_org_Clean$prediction
+retail_data_test_org_Final$score=retail_data_test_org$score
+retail_data_test_org_Final$prediction=retail_data_test_org$prediction
 
 
 #Creating the column y for the same
-score=retail_data_test_org_Final$prediction
+score=retail_data_test_org_Final$score
 dataframe_result_final=data.frame(score)
 
 
 #Writing it to the directory
-write.csv(dataframe_result_final,"Abhinaba_Chakraborty_P2_part2.csv")
+write.csv(dataframe_result_final,"Abhinaba_Chakraborty_P2_part2.csv",row.names = FALSE)
