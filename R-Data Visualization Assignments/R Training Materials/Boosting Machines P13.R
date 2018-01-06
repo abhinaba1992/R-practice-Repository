@@ -1,6 +1,6 @@
 #This part demonstrates the use of boosting machines in order to solve regression or classification problems
 #Author: Abhinaba Chakraborty
-#Last modified: 31/12/2017
+#Last modified: 06/01/2018
 
 #Including the required packages
 library(dplyr)
@@ -44,7 +44,7 @@ bd=read.csv("bike_sharing_hours.csv",stringsAsFactors = F)
 #Viewing the data set
 View(bd)
 
-#This is a regression problem where we can predict the count of bikes that can be taken in a day
+#This is a regression problem where we have to predict the count of bikes that can be taken in a day
 
 #Removing the unwanted cols or variables from the data set
 bd=bd %>% select(-yr,-instant,-dteday,-temp,-casual,-registered)
@@ -64,8 +64,9 @@ bd_train=bd[s,]
 bd_test=bd[-s,]
 
 #Ideally, we follow the steps like removing multicollinearity or variables with high pr values etc.
-#Which is also what we need to follow for GBM as well, however, for the sake of this example we are 
-#directly trying to solev the eqn. since the moto here is to understand GBM
+#Which is also what we need to follow for GBM gradient boosting machine as well, however, for the 
+#sake of this example we are directly trying to solev the eqn. since the moto here is to understand 
+#GBM or gradient boosting machine
 
 
 #Following the simple linear model first
@@ -86,19 +87,19 @@ test.pred=predict(fit,newdata = bd_test)
 #So, we are doing cross validation here using a custom function
 mykfolds=function(nobs,nfold=5){ #nobs is the no. of variables and nfold is the number of parts
                                  #So, the number of variables in each part would be nobs/nfold
-  t=cvFolds(nobs,K=nfold,type='random') #cvFolds function is used to split the data into train and test 
+t=cvFolds(nobs,K=nfold,type='random') #cvFolds function is used to split the data into train and test 
                                         #Internally, its basically used for cross validation
   
-  folds=list() #Creating an empty list
+folds=list() #Creating an empty list
 
-  #Here we are creating a train and test for our data through an iterating step and storing that data
-  #in a list for each fold that we have selected
-  for(i in 1:nfold){
+#Here we are creating a train and test for our data through an iterating step and storing that data
+#in a list for each fold that we have selected
+for(i in 1:nfold){
     test=t$subsets[t$which==i]
     train=t$subsets[t$which!=i]
     folds[[i]]=list('train'=train,'test'=test)
   }
-  return(folds)
+return(folds)
 }
 
 #running the above function with our choosen records
@@ -145,12 +146,32 @@ for(i in 1:10){
 }
 
 #We are now applying our trained model eqn. on the test data
-
 #So, We are first creating a data set where all the values are 0 for our test data
-bd_train_layer2=data.frame(rf_var=numeric(nrow(bd_test)),gbm_var=numeric(nrow(bd_test)))
+bd_test_layer2=data.frame(rf_var=numeric(nrow(bd_test)),gbm_var=numeric(nrow(bd_test)))
 
 #Now we are running the random forest and gbm on the train data again, so as to get the values for 
 #test data set to work
 full.rf=randomForest(cnt~.-weekday_6,data=bd_train,ntree=100,mtry=10)
 
 full.gbm=gbm(cnt~.-weekday_6,data=bd_train,distribution="gaussian",n.trees = 100,interaction.depth = 3)
+
+#Predicting the values for rf/random forest and gbm for our test data
+#random forest
+bd_test_layer2$rf_var=predict(full.rf,newdata=bd_test)
+
+#GBM
+bd_test_layer2$gbm_var=predict(full.gbm,newdata=bd_test,n.trees=100)
+
+
+#Creating the final stacked model
+bd_train_layer1$cnt=bd_train$cnt
+bd_test_layer2$cnt=bd_test$cnt
+
+lin.model=lm(cnt~.,data=bd_train_layer1)
+
+#predicting the values
+test.predict=predict(lin.model,newdata=bd_test_layer2)
+
+#rmse
+(test.pred-bd_test_layer2$cnt)**2 %>% mean() %>% sqrt()
+#We should see that the error has reduced.
