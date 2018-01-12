@@ -1,6 +1,6 @@
 #This portion covers the concepts of R basics, data visualisation in R, data preparation in R and  univariate statistics
 #Author: Abhinaba Chakraborty
-#last Updated: 06.01.2018
+#last Updated: 12.01.2018
 
 #dplyr: used for joins, also functions like mutate, select, filter, arrange, summarise and other data preparation functions.
 #psych : contains the describe function
@@ -898,6 +898,13 @@ mtcars %>% group_by(cyl, disp) %>% summarise(mpg_count=n()) %>% arrange(-mpg_cou
 #n_distinct() function helps us to get the count of unique values
 #eg.
 mtcars %>% group_by(cyl) %>% summarise(total_count=n(),distinct_count=n_distinct(am))
+
+
+#We can also step down a series using a function named lag in R
+#e.g.
+series=c(1,5,2,10,15,9,12)
+series_lag=lag(series)
+series_lag
 
 #Working with dates in R
 library(lubridate)
