@@ -1,7 +1,7 @@
 #This is a practice assignment to demonstrate Time series analysis
 
 #Setting the working directory
-setwd("C:\\E drive\\Docs\\R Practice docs\\Data")
+setwd("C:\\Users\\Abhinaba\\Desktop\\Edvancer Materials\\Data")
 
 #Reading the required files upon which we would be doing a time series analysis
 rain=read.csv("rain.csv")
@@ -138,3 +138,16 @@ hist(rf$residuals) #The histogram should follow a normal distribution
 # 2. Verifying that there is no auto correlation of errors
 acf(rf$residuals[-1],lag.max = 20) #acf is the auto correlation function or the plot that shows 
                                    #auto correlation
+#So the above plot would tell us what residuals are crossing the confidence intervals with a lag of 
+#different values. So, the blue dotted line is the confidence interval for the residuals and the horizontal
+#line passing through the middle is the centre of confidence interval of the residual. the upper vertical
+#and lower vertical lines in the horizontal surface represent auto correlation values when the series is 
+#dropped by 1 lag, 2 lag, 3 lag and so on and compared to the main series. If any vertical lines 
+#(both upward & Downward) crosses the blue horizontal line, then we may conlcude that there is a correlation
+#between that particular lag instance and the main series.
+
+#This may be used to verify the first assumption as well
+qqnorm(as.numeric(rf$residuals))
+#for checking sample qunatile Vs theoretical quantile.
+#Alternatively, we can also use a normal histogram and/or Sapiro wilks test and/or anderson darling test for
+#checking normality
