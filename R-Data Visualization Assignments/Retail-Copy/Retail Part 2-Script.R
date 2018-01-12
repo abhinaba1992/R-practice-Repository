@@ -140,7 +140,7 @@ table(Retail_test$store,as.numeric(Retail_test$score>KS_cutoff))
 
 roccurve_test=roc(Retail_test$store,Retail_test$score)
 
-#plotting the ROC curver
+#plotting the ROC curve
 plot(roccurve_test)
 
 #Area under the curver
@@ -184,12 +184,19 @@ retail_data_test_org$pred=retail_data_test_org %>% mutate(prediction=ifelse(scor
 
 #Appending the Score and prediction column with the original data set
 retail_data_test_org_Final$score=retail_data_test_org$score
+#We do not need the below prediction in the scenario here as we only need the probability values
 retail_data_test_org_Final$prediction=retail_data_test_org$prediction
 
 
 #Creating the column y for the same
+#stroring the result in an object score
 score=retail_data_test_org_Final$score
+#Calculating the average probability score so as to assign the missing values
+avg_result=round(mean(score,na.rm = TRUE),3)
+#Creating a new data frame to write the resut
 dataframe_result_final=data.frame(score)
+#Replacing the NA values in the data frame with the average score/probability
+dataframe_result_final$score[which(is.na(dataframe_result_final$score))]=avg_result
 
 
 #Writing it to the directory
