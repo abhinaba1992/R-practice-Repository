@@ -36,10 +36,10 @@ class(retail_data_Clean$store)
 apply(retail_data,2,function(x) sum(is.na(x)))
 #Thus by running the above query we can conclude that there is one NA value for our column population
 
-#removing the NA field from column population
+#removing the NA field from column population as it may give an error
 retail_data_Clean=retail_data_Clean %>% na.omit()
 
-#Verifying the removal of all NAs from mour dataset
+#Verifying the removal of all NAs from our dataset
 apply(retail_data_Clean,2,function(x) sum(is.na(x)))
 
 
@@ -53,7 +53,7 @@ glimpse(retail_data_Clean)
 
 
 
-# 3. SPLITTING THE DATA INTO TRAIN AND TEST
+# 3. SPLITTING THE FAIR TRAIN DATA INTO TRAIN AND TEST
 
 set.seed(1)
 retail_clnData=sample(1:nrow(retail_data_Clean),0.75*nrow(retail_data_Clean)) 
@@ -188,7 +188,6 @@ retail_data_test_org_Final$score=retail_data_test_org$score
 retail_data_test_org_Final$prediction=retail_data_test_org$prediction
 
 
-#Creating the column y for the same
 #stroring the result in an object score
 score=retail_data_test_org_Final$score
 #Calculating the average probability score so as to assign the missing values
