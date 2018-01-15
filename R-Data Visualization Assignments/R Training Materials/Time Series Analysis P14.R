@@ -1,4 +1,7 @@
 #This is a practice assignment to demonstrate Time series analysis
+#AUTHOR: Abhinaba Chakraborty
+
+#PART 1: 12th November 2017
 
 #Setting the working directory
 setwd("C:\\Users\\Abhinaba\\Desktop\\Edvancer Materials\\Data")
@@ -151,3 +154,72 @@ qqnorm(as.numeric(rf$residuals))
 #for checking sample qunatile Vs theoretical quantile.
 #Alternatively, we can also use a normal histogram and/or Sapiro wilks test and/or anderson darling test for
 #checking normality
+
+
+#PART 2: 18th November 2017
+skirts=read.csv("skirts.csv")
+skirts=ts(skirts,start=c(1866)) #Since we know our series starts with 1866 before hand
+plot(skirts)
+
+
+#We conclude that there is a level and trend pattern in the above chart
+skirtforecast=HoltWinters(skirts,gamma = F) #Ideally we need to set values for alpha, beta and gamma,
+                                            #but since we have level and trend component in our charts
+                                            #we already knew that alpha and gamma will be true, hence we
+                                            #didn't mention it in the function.
+plot(skirtforecast) 
+skirtforecast
+
+
+#Now we are forecasting for the next 20 years to look at the pattern
+skirtfuture=forecast:::forecast.HoltWinters(skirtforecast,h=20) #Predicting for upcoming 20 years
+
+plot(skirtfuture)
+#We would see that the confidence interval is varying a lot over the next 20 years and this makes our data
+#less reliable, thus we can try and do the same we did above for a shorter time period
+skirtfuture=forecast:::forecast.HoltWinters(skirtforecast,h=5) #Predicting for upcoming 5 years
+
+plot(skirtfuture)
+
+skirtfuture
+
+
+#Verifying the assumption
+#1. Normality of errors
+hist(skirtfuture$residuals)
+qqnorm(as.numeric(skirtfuture$residuals))
+
+
+#2. Verifying that there is no auto correlation of errors
+acf(skirtfuture$residuals[-c(1,2)],lag.max = 30) #acf is the auto correlation function or the plot that shows 
+#auto correlation
+
+#We found out that there is one spike that is going out of the designated limits, now in order to conclude
+#that this is statistically significant, we do a box ljung test
+#box ljung test tells us if the spikes that are crossing the border lines in the acf plot are statistically
+#significant or not
+#Null hypothesis for this box ljung test is that there is no auto correlation in betweeb the errors,
+#that is the values are independent
+#Alternate hypotheses is that there is auto correlation among the errors
+Box.test(as.numeric(skirtfuture$residuals),lag=20,type="Ljung-Box")
+#SInce the p-value is high, we accept our null hypothesis
+
+
+
+
+#New data set
+souvenir=read.csv("souvenir.csv")
+
+souvenirts=ts(souvenir,frequency=12,start=c(1987,1))
+#Here the frequency is set to 12, whcih signifies that the data is present in a monthly fashion
+#also, since the frequncy of the data is monthly, the start function will allow us to enter the month
+#along with the year as well, here 1987 is the year and 1 is the month
+
+souvenirts
+#So running the above object would show us the data broken down by Year and monthly fashion
+
+plot(souvenirts)
+#So Here we see all the three patterns or components namely level, pattern and cyclic patterns as the 
+#data is getting repeated in a yearly fashion, also we see an increase in sales year after year.
+
+
