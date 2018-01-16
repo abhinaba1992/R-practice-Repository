@@ -133,7 +133,7 @@ plot(rf)
 
 rf
 
-#-------------------------------------------------
+#------------------------------------------------------------------------------------------------------
 
 #Verifying assumptions
 # 1. Normality of errors/residuals
@@ -303,3 +303,38 @@ qqnorm(as.numeric(arimafuture$residuals))
 
 
 #Dynamic regression
+library(fpp)
+#Loading the library fpp that contains the data set for quarterly changes in  US consumption 
+#and personal income
+
+#Plotting the same
+plot(usconsumption,xlab="Year",main="Quarterly changes in  US consumption and personal income")
+#So we would be able to see the data fr two columns here, the consumption and income, this data is
+#represented quarter wise
+
+fit=auto.arima(usconsumption[,1],xreg=usconsumption[,2]) #We are trying to predict consumption based on 
+                                                         #income, hence xreg is mentioned as income column
+#Viewing the same                                       
+fit
+
+#Running the ARIMA 
+usc=Arima(usconsumption[,1],xreg=usconsumption[,2],order = c(1,0,2))
+usc
+
+#Trying to predict the values for the next two quarters
+#Passing the values for income in the next two quarters
+new=cbind.data.frame(income=c(0.8,0.5)) #Here we are giving the values  of income for the next 2 quarters
+
+#predicting the values
+usfuture=forecast:::forecast.Arima(usc,xreg=new$income)
+
+#Plotting the values for reference
+plot(usfuture)
+
+#Visualising the above
+usfuture
+
+
+#lagged variable
+plot(insurance,xlab="Year",main="Insurance advertising and quotations")
+
