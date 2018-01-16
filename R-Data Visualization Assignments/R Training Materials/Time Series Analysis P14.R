@@ -1,5 +1,6 @@
 #This is a practice assignment to demonstrate Time series analysis
 #AUTHOR: Abhinaba Chakraborty
+#LAST MODIFIED: 16th JAN 2018
 
 #PART 1: 12th November 2017
 
@@ -222,4 +223,83 @@ plot(souvenirts)
 #So Here we see all the three patterns or components namely level, pattern and cyclic patterns as the 
 #data is getting repeated in a yearly fashion, also we see an increase in sales year after year.
 
+#Now, the problem with exponential smoothing is that it can't handle the pattern or trend of increasing
+#seasonality over a period of time, so we need to balance it out first i.e.; we need to control that and
+#then use our model on top of it.
+#So in order to predict or forecast the future values in a scenario like this we need to first control 
+#the variation and then do the forecasting
 
+
+#We are doing some basic transformation to our data to make to simplify the pattern
+souvenirts=log(souvenirts) #This is somewhat similar to the concept in linear regression where we do
+                           #some basic transformation if our data doesn't follow normal distribution
+
+
+plot(souvenirts)
+
+# Sincew we concluded that there are all the 3 main patterns in our data, we are now passing the object
+#holt winters method (we have not mentioned any values for alpha, beta or gamma as all of them are true)
+souvenirforecast=HoltWinters(souvenirts)
+
+#Viewing the data set
+souvenirforecast
+
+#plotting the trend
+plot(souvenirforecast)
+
+#forecasting the values
+souvenirfuture=forecast:::forecast.HoltWinters(souvenirforecast,h=48) #Predicting for upcoming 48 months
+
+#plotting the same
+plot(souvenirfuture)
+#Now the above plot will show the values in the log scale, we need to convert the same in an exponential
+#scale
+
+#Viewing the forecasted values
+souvenirfuture
+
+#Verifing assumptions
+#acf plot
+acf(souvenirfuture$residuals,lag.max = 30,na.action = na.pass) 
+#acf is the auto correlation function or the plot that shows auto correlation
+#na.action = na.pass signifies how nas will be treated while verifying the assumption
+
+#normality of errors
+hist(souvenirfuture$residuals)
+qqnorm(as.numeric(souvenirfuture$residuals))
+
+
+#ARIMA (Auto regressive integrated moving average)
+#Identifying patterns in our data
+plot(decompose(souvenirts))
+#The above line would help us to distinguish and understand each pattern of data
+
+
+#ARIMA models have 3 parameters and is generally written as ARIMA(p,d,q)
+auto.arima(souvenirts,trace = T)
+#The above function would help us to get the best model
+
+
+#WE need to now run the model in our data set for which we use arima
+arimafit=arima(souvenirts,order=c(2,0,0),seasonal=c(1,1,0))
+
+#forecasting
+arimafuture=forecast:::forecast.Arima(arimafit,h=48)
+
+#Plotting the same
+plot(arimafuture)
+
+#Viewing the values for the same
+arimafuture
+
+#Verifying assumptions (although this is optional for ARIMA)
+#acf plot
+acf(arimafuture$residuals,lag.max = 30,na.action = na.pass) 
+
+
+#normality of errors
+hist(arimafuture$residuals)
+qqnorm(as.numeric(arimafuture$residuals))
+
+
+#Dynamic regression
