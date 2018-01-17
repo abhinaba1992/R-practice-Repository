@@ -1,6 +1,6 @@
 #This is a practice assignment to demonstrate Time series analysis
 #AUTHOR: Abhinaba Chakraborty
-#LAST MODIFIED: 16th JAN 2018
+#LAST MODIFIED: 17th JAN 2018
 
 #PART 1: 12th November 2017
 
@@ -302,7 +302,7 @@ hist(arimafuture$residuals)
 qqnorm(as.numeric(arimafuture$residuals))
 
 
-#Dynamic regression
+#DYNAMIC REGRESSION (When we have to forecast the value of a variable based on another variable)
 library(fpp)
 #Loading the library fpp that contains the data set for quarterly changes in  US consumption 
 #and personal income
@@ -337,4 +337,56 @@ usfuture
 
 #lagged variable
 plot(insurance,xlab="Year",main="Insurance advertising and quotations")
+#Insurance data set here has quotes and tv advertisements column, the above graph shows the pattern
+#for Quotes and TV adverts
 
+Advert=cbind(insurance[,2],c(NA,insurance[1:39,2]),
+             c(NA,NA,insurance[1:38,2]),
+             c(NA,NA,NA,insurance[1:37,2]))
+#We are lagging the series by one component one by one
+#So lagging the series down by one step, two step and three step respectively would help us find wether
+#there is a relation between first days advertisement value with the second day, third day and/or fourth
+#day. (It will be clearer while we view the Advert data frame in line 356)
+
+#Creating the column names for the above data
+colnames(Advert)=paste("Adlag",0:3,sep="")
+
+#Looking at the data set
+View(Advert)
+
+
+#We are now trying to predict the values of advertisements based on quotes with various lags
+#First, we are only considering the column Adlag0 for prediction
+fit1=auto.arima(insurance[4:40,1],xreg=Advert[4:40,1],d=0) #here d signifies the drift
+
+#Second, we are now considering the column Adlag0 and Adlag1 for prediction
+fit2=auto.arima(insurance[4:40,1],xreg=Advert[4:40,1:2],d=0) #here d signifies the drift
+
+#Third, we are now considering the column Adlag0, Adlag1 and Adlag2 for prediction
+fit3=auto.arima(insurance[4:40,1],xreg=Advert[4:40,1:3],d=0) #here d signifies the drift
+
+#Fourth, we are now considering the column Adlag0, Adlag1, Adlag2 and Adlag3 for prediction
+fit4=auto.arima(insurance[4:40,1],xreg=Advert[4:40,1:4],d=0) #here d signifies the drift
+
+
+#Checking the aic of all the above to check which has the lowest aic
+fit1$aic
+fit2$aic
+fit3$aic
+fit4$aic
+#So, from above we can conclude that fit 2 or the second model has the lowest aic
+
+#So, now we are trying to create an auto.arima and fit the 2nd model on top of it
+fit=auto.arima(insurance[,1],xreg=Advert[,1:2],d=0)
+
+#Now we are predicting the future values based on the current values
+fc=forecast(fit,xreg=cbind(rep(8,20),c(Advert[40,1],rep(8,19))),h=20)
+#Here we are creating the the regressior, so for that we are creating 20 rows with 8 as their values
+#We are also taking the last value of the main series that is 8.72860 and repeating it 19 times
+#this is done in order to predict the future values, here it would predict the data for next 20 months
+
+#We are now plotting the same
+plot(fc,main="forecast quotes with advertising set to 8",ylab="Quotes")
+
+#NOTE: for doing forecasting which is dependent on another variable we either need to know the future values
+#of xregs(the regressor variable) or assume the values of the same
