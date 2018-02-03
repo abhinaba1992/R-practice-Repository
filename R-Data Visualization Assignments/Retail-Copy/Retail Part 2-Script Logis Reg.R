@@ -15,7 +15,7 @@ library(pROC) #for drawing the area under the curve
 
 
 #Setting the working directory
-setwd("C:/Users/Abhinaba/Desktop/Edvancer Materials/Project/R Projects/Retail-Copy")
+setwd("C:/Users/Abhinaba/Desktop/Edvancer Materials/Project/CBAP R Projects/Retail-Copy")
 
 #Loading data from file
 retail_data=read.csv("store_train.csv")
