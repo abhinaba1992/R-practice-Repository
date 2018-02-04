@@ -37,14 +37,49 @@ retail_data_clean=retail_data
 retail_data_clean = retail_data_clean %>% mutate(sales=sales0+sales1+sales2+sales3+sales4) %>% 
   select(-sales0,-sales1,-sales2,-sales3,-sales4)
 
+#Taking a glimpse at the modified data set
 glimpse(retail_data_clean)
 
+#Checking the boxplot of the same to check for the outliers
+boxplot(retail_data_clean$sales)
+
+#Checking the upper and lower bound values
+min(retail_data_clean$sales)
+max(retail_data_clean$sales)
+
+summary(retail_data_clean$sales)
+#Q1: 3422
+#Q3: 4969
+#Min: 2173
+#Max: 11140
+
+#Finding the Inter quantile range (Q3-Q1)
+IQR_Totalsales=IQR(retail_data_clean$sales)
+
+#Deciding the lower bound and upper bound values
+low_bound=(3422-(1.5*IQR_Totalsales))
+upp_bound=(4969+(1.5*IQR_Totalsales))
+
+#Filters having values within the decided range
+retail_data_clean=retail_data_clean %>% filter(sales>=low_bound & sales<=upp_bound)
+
+#Viewing the filter retail data
+View(retail_data_clean)
+
+#Count of rows in the filtered data set
+nrow(retail_data_clean)
+
+#Total rows in the data set
+nrow(retail_data)
+
+#Rows filtered out
+nrow(retail_data)-nrow(retail_data_clean)
 
 #lets delete the countyname,storecode, Areaname, countytownname, state_alpha specific colums as 
 #location specific details are very difficult to group and work with
 retail_data_clean = retail_data_clean %>%  select(-countyname,-storecode,-Areaname,-countytownname,-state_alpha)
 
-
+#Taking a glimpse
 glimpse(retail_data_clean)
 
 
@@ -52,10 +87,12 @@ glimpse(retail_data_clean)
 unique(retail_data_clean$store_Type)
 
 retail_data_clean=retail_data_clean %>% mutate(str_typ_1=as.numeric(store_Type=="Supermarket Type1"),
-                                             str_typ_2=as.numeric(store_Type=="Supermarket Type2")) %>% select(-store_Type)
+                                             str_typ_2=as.numeric(store_Type=="Supermarket Type2"),
+                                             str_typ_3=as.numeric(store_Type=="Supermarket Type3")) %>% select(-store_Type)
 
 
 glimpse(retail_data_clean)
+
 
 # Deleting the ID field as its not required for data interpretation
 retail_data_clean=retail_data_clean %>% select(-Id)
@@ -110,9 +147,9 @@ formula(fit)
 
 
 #Best possible iteration values
-# Step:  AIC=2928.01
-# eqn.: store ~ CouSub + population + sales
-fit1=glm(store ~ CouSub + population + sales, data=retail_data_clean_train, family="binomial")
+# Step:  AIC=2789.95
+# eqn.: store ~ population + sales
+fit1=glm(store ~ population + sales, data=retail_data_clean_train, family="binomial")
 
 summary(fit1)
 
@@ -180,9 +217,7 @@ cutoff_data=cutoff_data[-1,]
 #We are now creating all the matrix like sensitivity, specificity, accuracy, distance,
 #lift, KS, user defined matrix etc
 cutoff_data=cutoff_data %>%
-  mutate(Sn=TP/P, Sp=TN/N,
-         dist=sqrt((1-Sn)**2+(1-Sp)**2),
-         P=FN+TP,N=TN+FP) %>%
+  mutate(Sn=TP/P, Sp=TN/N,dist=sqrt((1-Sn)**2+(1-Sp)**2),P=FN+TP,N=TN+FP) %>%
   mutate(KS=abs((TP/P)-(FP/N))) %>%
   mutate(Accuracy=(TP+TN)/(P+N)) %>%
   mutate(Lift=(TP/P)/((TP+FP)/(P+N))) %>%
@@ -229,7 +264,7 @@ plot(roccurve)
 #Area under the curver
 auc(roccurve)
 
-#Area under the curve for our train data set becomes 0.7101
+#Area under the curve for our train data set becomes 0.7096
 
 #----------------------------------------------------------------------------------------------------
 # 7. TESTING THE MODEL ON OUR SAMPLE TEST DATA 
@@ -274,7 +309,7 @@ plot(roccurve_test)
 #Area under the curver
 auc(roccurve_test)
 
-#Area under the curve for our test data set becomes 0.7153
+#Area under the curve for our test data set becomes 0.7285
 
 #----------------------------------------------------------------------------------------------------
 
@@ -292,7 +327,8 @@ retail_data_test_DS=retail_data_test_DS  %>% mutate(sales=sales0+sales1+sales2+s
 retail_data_test_DS = retail_data_test_DS %>%  select(-countyname,-storecode,-Areaname,-countytownname,-state_alpha)
 
 retail_data_test_DS=retail_data_test_DS %>% mutate(str_typ_1=as.numeric(store_Type=="Supermarket Type1"),
-                                               str_typ_2=as.numeric(store_Type=="Supermarket Type2")) %>% select(-store_Type)
+                                               str_typ_2=as.numeric(store_Type=="Supermarket Type2"),
+                                               str_typ_3=as.numeric(store_Type=="Supermarket Type3")) %>% select(-store_Type)
 
 retail_data_test_DS=retail_data_test_DS %>% select(-Id)
 
