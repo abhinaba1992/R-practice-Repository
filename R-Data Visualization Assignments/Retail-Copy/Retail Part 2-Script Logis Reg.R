@@ -1,7 +1,7 @@
 #This is the second attempt at the retail project part 2 problem: We are using Logistic regression here instead
 #of random forest
 #AUTHOR: Abhinaba Chakraborty
-#LAST MODIFIED: 14th January 2018
+#LAST MODIFIED: 7th February 2018
 
 
 # 1. ENVIRONMENT SETUP
@@ -43,10 +43,6 @@ glimpse(retail_data_clean)
 #Checking the boxplot of the same to check for the outliers
 boxplot(retail_data_clean$sales)
 
-#Checking the upper and lower bound values
-min(retail_data_clean$sales)
-max(retail_data_clean$sales)
-
 summary(retail_data_clean$sales)
 #Q1: 3422
 #Q3: 4969
@@ -74,6 +70,30 @@ nrow(retail_data)
 
 #Rows filtered out
 nrow(retail_data)-nrow(retail_data_clean)
+#140 outliers from the original data set are removed
+
+
+#Removing outliers in column population (note that we can't do the same for columns like
+#country, state and CouSub are location specific absolute variables and cant be included)
+boxplot(retail_data_clean$population)
+
+summary(retail_data_clean$population)
+#Q1: 3976
+#Q3: 42074
+
+IQR_Totalsales_Pop=IQR(retail_data_clean$population,na.rm = TRUE)
+low_bound_Pop=(3976-(1.5*IQR_Totalsales_Pop))
+upp_bound_Pop=(42074+(1.5*IQR_Totalsales_Pop))
+
+retail_data_clean = retail_data_clean %>% filter(population>=low_bound_Pop & population<=upp_bound_Pop)
+nrow(retail_data)
+nrow(retail_data_clean)
+nrow(retail_data)-nrow(retail_data_clean)
+
+#At this point of time 524 rows having outliers have been filtered out of the original data set
+#140 outliers in sales
+#384 outliers in population
+
 
 #lets delete the countyname,storecode, Areaname, countytownname, state_alpha specific colums as 
 #location specific details are very difficult to group and work with
@@ -86,6 +106,9 @@ glimpse(retail_data_clean)
 #Converting the store type variable
 unique(retail_data_clean$store_Type)
 
+
+#The variable store type contains 4 variations, namely Supermarket Type1, Supermarket Type2, Supermarket Type3
+#and Supermarket Type1 Grocery Store, hence creating 3 dummies
 retail_data_clean=retail_data_clean %>% mutate(str_typ_1=as.numeric(store_Type=="Supermarket Type1"),
                                              str_typ_2=as.numeric(store_Type=="Supermarket Type2"),
                                              str_typ_3=as.numeric(store_Type=="Supermarket Type3")) %>% select(-store_Type)
@@ -103,13 +126,14 @@ glimpse(retail_data_clean)
 
 #Checking if any columns contain NAs
 apply(retail_data_clean,2,function(x) sum(is.na(x)))
+#No outliers found
 
-#removing the NA field from column population as it may give an error
-retail_data_clean=retail_data_clean %>% na.omit()
+# #removing the NA field from column population as it may give an error
+# retail_data_clean=retail_data_clean %>% na.omit()
+
 
 
 #Splitting the data into train and test
-
 set.seed(2)
 s=sample(1:nrow(retail_data_clean),0.7*nrow(retail_data_clean))
 retail_data_clean_train=retail_data_clean[s,]
@@ -127,7 +151,7 @@ for_vif=lm(store~.,data=retail_data_clean_train)
 t=vif(for_vif)
 #Finding the variables with highest vif values
 sort(t,decreasing = T)
-#There are no variables with a vif more than 5.0, 
+#There are no variables with a vif more than 5.0, so all seems ok at this point of time 
 
 #----------------------------------------------------------------------------------------------------
 
@@ -136,7 +160,10 @@ sort(t,decreasing = T)
 fit=glm(store~.,family="binomial",data=retail_data_clean_train)
 
 #Checking the summary of fit
-summary(fit)
+summary(fit) 
+#We found that we are getting an AIC of 2386.4, which is better than the previous iterations. However, need
+#to check for checking multicolinearity and alternating null hypothesis, we are using step wise  
+
 
 #We are following a step wise approach for removal of the unsignificant variables/variables with higher 
 #probability of adhereing to the null hypothesis
@@ -146,12 +173,19 @@ fit=step(fit)
 formula(fit)
 
 
-#Best possible iteration values
-# Step:  AIC=2789.95
-# eqn.: store ~ population + sales
-fit1=glm(store ~ population + sales, data=retail_data_clean_train, family="binomial")
+#Best possible iteration values obtained from step wise
+# Step:  AIC=2380.17
+# eqn.: store ~ country + CouSub + population + sales
+fit1=glm(store ~ country + CouSub + population + sales, data=retail_data_clean_train, family="binomial")
 
 summary(fit1)
+
+
+#Country has a high pr value which is greater than 0.05, so we are removing it manually
+fit1=glm(store ~ CouSub + population + sales, data=retail_data_clean_train, family="binomial")
+
+summary(fit1)
+
 
 #----------------------------------------------------------------------------------------------------
 
@@ -264,7 +298,7 @@ plot(roccurve)
 #Area under the curver
 auc(roccurve)
 
-#Area under the curve for our train data set becomes 0.7096
+#Area under the curve for our train data set becomes 0.6962
 
 #----------------------------------------------------------------------------------------------------
 # 7. TESTING THE MODEL ON OUR SAMPLE TEST DATA 
@@ -279,10 +313,10 @@ table(retail_data_clean_test$store,as.numeric(retail_data_clean_test$score>KS_cu
 #KS cutoff is calculated from the model
 
 #From above, We find the fllowing
-TP_test=299
-FN_test=145
-TN_test=382
-FP_test=176
+TP_test=158
+FN_test=155
+TN_test=388
+FP_test=144
 
 
 #Calculating other matrix
@@ -293,11 +327,11 @@ Accuracy_test=((TP_test+TN_test)/(TP_test+TN_test+FN_test+FP_test))
 KS=abs(((TP_test)/(TP_test+FN_test))-((FP_test)/(FP_test+TN_test)))
 
 
-#Sensitivity: 0.67
-#Specificity: 0.68
-#Precision: 0.62
-#Accuracy: 0.67
-#KS: 0.35
+#Sensitivity: 0.50
+#Specificity: 0.72
+#Precision: 0.52
+#Accuracy: 0.64
+#KS: 0.23
 
 #Drawing the ROC or Receiver Operating Characteristics curve for test data
 
@@ -309,7 +343,7 @@ plot(roccurve_test)
 #Area under the curver
 auc(roccurve_test)
 
-#Area under the curve for our test data set becomes 0.7285
+#Area under the curve for our test data set becomes 0.6664
 
 #----------------------------------------------------------------------------------------------------
 
@@ -339,7 +373,7 @@ glimpse(retail_data_test_DS)
 #Running the logistic regression on the dataset
 retail_data_test_DS$score=predict(fit1,newdata = retail_data_test_DS,type = "response")
 
-#Now, our cutoff is 0.101, therefore
+#Now, our cutoff is 0.384, therefore
 retail_data_test_DS=retail_data_test_DS %>% mutate(prediction=ifelse(score>0.384,1,0))
 
 #Viewing the same
@@ -350,7 +384,7 @@ View(retail_data_test_DS)
 retail_data_test_DS_Orig$score=retail_data_test_DS$score
 retail_data_test_DS_Orig$prediction=retail_data_test_DS$prediction
 
-
+#handling NA values in the data set
 #stroring the result in an object store
 store=retail_data_test_DS_Orig$score
 #Calculating the average probability score so as to assign the missing values
