@@ -1,7 +1,7 @@
 #This is the second attempt at the retail project part 2 problem: We are using Logistic regression here instead
 #of random forest
 #AUTHOR: Abhinaba Chakraborty
-#LAST MODIFIED: 7th February 2018
+#LAST MODIFIED: 7th March 2018
 
 
 # 1. ENVIRONMENT SETUP
