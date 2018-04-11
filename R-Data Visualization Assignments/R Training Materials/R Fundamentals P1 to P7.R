@@ -282,9 +282,9 @@ names(df2)[c(1,2)] #to get specifc colnames (way 2)
 names(df2)[c(1:3)] #to get specifc colnames (way 3)
 #another method for getting the column names
 colnames(df2)
-names(df2)[1]# to get specific colnames
-names(df2)[c(1,2)] #to get specifc colnames (way 2)
-names(df2)[c(1:3)] #to get specifc colnames (way 3)
+colnames(df2)[1]# to get specific colnames
+colnames(df2)[c(1,2)] #to get specifc colnames (way 2)
+colnames(df2)[c(1:3)] #to get specifc colnames (way 3)
 
 #methodto get the rownames of thev ector
 rownames(df2)
@@ -418,7 +418,7 @@ list2$a[2]
 #---------------------------------------------------------------------------------------------------
 
 #cbind(), this is used for appending columns to a data frame
-#rbind(), this isused fro appending rows to a datafram
+#rbind(), this isused for appending rows to a datafram
 
 #---------------------------------------------------------------------------------------------------
 #Joins
@@ -1102,7 +1102,7 @@ con = odbcConnect("DemoData")
 Student_Data= sqlQuery(con,"select * from [Abhinaba].[studentsDetails]")
 
 #Running a SP with a hard coded parameter
-Student_Data_SP <-sqlQuery(con, "set nocount on\nEXEC getdetails_basedOnID @ID=7")
+Student_Data_SP =sqlQuery(con, "EXEC getdetails_basedOnID @ID=7")
 
 
 #With a dynamic parameter value
