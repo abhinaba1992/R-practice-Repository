@@ -1143,3 +1143,4 @@ ggplot(DataSetGrouped, aes(name, value)) +
   geom_bar(aes(fill = variable), stat="identity") +
   scale_fill_brewer(palette="Pastel1") +
   theme_dark()
+
