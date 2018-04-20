@@ -239,7 +239,7 @@ varImpPlot(class_rf)
 #-----------------------------------------------------------------------------------------------------
 
 # RUNNING RANDOM FOREST FOR REGRESSION (This part is yet to be completed)
-setwd("C:/Users/chakrabortyab/Desktop/R Practice/Data")
+setwd("C:/Users/Abhinaba/Desktop/Edvancer Materials/Data")
 loandata=read.csv("loans data.csv",stringsAsFactors = F)
 
 #Taking a glimpse of the data loan data
@@ -288,7 +288,10 @@ ld_pred_test=predict(rt.loandata,newdata=ld_test)
 #Finding the values through random forest
 rf_ld=randomForest(Interest.Rate~.-ID-State,data=ld_train) #have disabled trace for this
 
-#We cna see the importance and plot for rf_ld after this
+#Predicting using random forest
+lin.forest.pred=predict(rf_ld,newdata = ld_test)
+
+#We can see the importance and plot for rf_ld after this
 #Calculating importance
 def=importance(rf_ld)
 #OR
