@@ -51,7 +51,7 @@ rainforecast=HoltWinters(raints,beta=T,gamma=T)
 #The above code would give us an error since we are giving gamma as true, which signifies that our data has
 #a seasonal pattern, now for that theory to work, there has to be monthy data, so that the algo. can find
 #and verify patterns for atleast two years, which is not possible here since we are showing the data points
-#in months
+#in years and not months
 
 #Trying another combination by removing gamma
 rainforecast=HoltWinters(raints,gamma=F)
@@ -199,7 +199,7 @@ acf(skirtfuture$residuals[-c(1,2)],lag.max = 30) #acf is the auto correlation fu
 #that this is statistically significant, we do a box ljung test
 #box ljung test tells us if the spikes that are crossing the border lines in the acf plot are statistically
 #significant or not
-#Null hypothesis for this box ljung test is that there is no auto correlation in betweeb the errors,
+#Null hypothesis for this box ljung test is that there is no auto correlation in between the errors,
 #that is the values are independent
 #Alternate hypotheses is that there is auto correlation among the errors
 Box.test(as.numeric(skirtfuture$residuals),lag=20,type="Ljung-Box")
