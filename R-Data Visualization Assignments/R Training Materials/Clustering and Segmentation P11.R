@@ -143,8 +143,8 @@ ggplot(d,aes(x=cluster))+geom_bar(aes(fill=cluster))
 
 
 #Taking a real time data set to test k-means
-#setwd("C:/Users/chakrabortyab/Desktop/R Practice/Data")
-setwd("C:/E drive/Docs/R Practice docs")
+#setwd("C:/Users/Abhinaba/Desktop/Edvancer Materials/Data")
+
 
 wine=read.csv("winequality-red.csv",sep=";")
 
@@ -211,4 +211,4 @@ ggplot(wine,aes(sulphates,alcohol,color=as.factor(cluster)))+geom_point()
 
 #Analyzing the cluster with apply so as to view and compare the means of all the four cols
 #across the clusters
-apply(wine,2,function(x) tapply(x,wine$cluster,mean)) 
+apply(wine,2,function(x) tapply(x,wine$cluster,mean))
