@@ -1,3 +1,24 @@
+#This piece of code demonstrates the PCA algo implementation through R
+#Rough steps for achieving the same: (from an implementation perspective these steps are in a way that we implement in R
+#and the same would vary in Python)
+#1. Data cleaning: Missing value imputation, NA removal, dummification and converting the object/factor/categorical  
+#   variables to integer variables since PCA works only on integer vars.
+#2. Splitting the data into train and test.
+#3. Scaling or standardisation followed by finding the principal components. We would get:
+#a. scale(standard deviation), 
+#b. center(mean), 
+#c. rotation(principal component loading vector:its the Components and the variable values explained by each component), 
+#d. x(this would give us the correlation matrix of principal component score vectors in a 8523 × 44 dimension )
+#4. Plotting the resultant Principal Components 
+#5. Calculate Standard Deviation followed by Variance for each principal component.
+#6. Checking the explained variance ratio
+#7. Plotting a scree plot to find the number of principal components that expalins most of the variation in the data
+#8. Plotting a cumulative scree plot for better understanding of the principal components
+#9. Appending our obtained PCA data(the data obtained in step 3.d) with the main data frame target variable column 
+#   and runnning the respective algorithm of our choice
+#10. Testing the the model for prediction and errors
+
+
 #Setting the Directory
 setwd('C:\\Users\\Abhinaba\\Desktop\\Hackathons\\Understanding PCA with R- Big Mart Sales Practice Problem')
 
@@ -13,7 +34,7 @@ View(test)
 test$Item_Outlet_Sales = 1
 
 #combine the train and test data set
-combi <- rbind(train, test)
+combi = rbind(train, test)
 #Viewing the same
 View(combi)
 
@@ -38,7 +59,7 @@ my_data = subset(combi, select = -c(Item_Outlet_Sales, Item_Identifier,Outlet_Id
 #check available variables
 colnames(my_data)
 
-#Since PCA works on numeric variables, let's see if we have any variable other than numeric.
+#Since PCA works on numeric variables, let’s see if we have any variable other than numeric.
 str(my_data)
 #so, 6 out of 9 variables are categorical in nature, we need to do some sort of transforamtion for or PCA
 #algorithm to work. 
@@ -48,7 +69,7 @@ str(my_data)
 library(dummies)
 
 #create a dummy data frame
-new_my_data <- dummy.data.frame(my_data, names = c("Item_Fat_Content","Item_Type",
+new_my_data = dummy.data.frame(my_data, names = c("Item_Fat_Content","Item_Type",
                                                      "Outlet_Establishment_Year","Outlet_Size",
                                                      "Outlet_Location_Type","Outlet_Type"))
 
@@ -57,18 +78,18 @@ new_my_data <- dummy.data.frame(my_data, names = c("Item_Fat_Content","Item_Type
 #check the data set
 str(new_my_data)
 
-#And, we now have all the numerical values. Let's divide the data into test and train.
+#And, we now have all the numerical values. Let’s divide the data into test and train.
 
 #divide the new data
-pca.train <- new_my_data[1:nrow(train),]
-pca.test <- new_my_data[-(1:nrow(train)),]
+pca.train = new_my_data[1:nrow(train),]
+pca.test = new_my_data[-(1:nrow(train)),]
 
 
 #We can now go ahead with PCA.
 
 #principal component analysis
 #Scaling the values or doing standardisation
-prin_comp <- prcomp(pca.train, scale. = T)
+prin_comp = prcomp(pca.train, scale. = T)
 names(prin_comp)
 
 
@@ -88,20 +109,19 @@ prin_comp$scale
 
 prin_comp$rotation
 
-#This returns 44 principal components loadings. Is that correct ? Absolutely. In a data set, the maximum number of principal
-#component loadings is a minimum of (n-1, p).#44 components are returned because the same is the total number of cols/features 
-#after dummification 
+#This returns 44 principal components loadings coz in a data set, the maximum number of principal component loadings is a
+#minimum of (n-1, p).#44 components are returned because the same is the total number of cols/features after dummification 
 
-#Let's look at first 4 principal components and first 5 rows.
+#Let’s look at first 4 principal components and first 5 rows.
 
 prin_comp$rotation[1:5,1:4]
 
-#3. In order to compute the principal component score vector, we don't need to multiply the loading with data. Rather, the 
-#matrix x has the principal component score vectors in a 8523 � 44 dimension.
+#3. In order to compute the principal component score vector, we don’t need to multiply the loading with data. Rather, the 
+#matrix x has the principal component score vectors in a 8523 × 44 dimension.
 
 dim(prin_comp$x)
 
-#Let's plot the resultant principal components.
+#Let’s plot the resultant principal components.
 
 biplot(prin_comp, scale = 0)
 
@@ -116,7 +136,7 @@ pr_var[1:10]
 
 
 #proportion of variance explained
-prop_varex <- pr_var/sum(pr_var)
+prop_varex = pr_var/sum(pr_var)
 prop_varex[1:20] #Seeing for the first 20 components
 
 
