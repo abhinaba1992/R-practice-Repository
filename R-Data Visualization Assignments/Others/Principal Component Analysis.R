@@ -1,4 +1,8 @@
 #This piece of code demonstrates the PCA algo implementation through R
+#This is taken for analytics vidhya
+#Source: https://www.analyticsvidhya.com/blog/2016/03/practical-guide-principal-component-analysis-python/
+
+
 #Rough steps for achieving the same: (from an implementation perspective these steps are in a way that we implement in R
 #and the same would vary in Python)
 #1. Data cleaning: Missing value imputation, NA removal, dummification and converting the object/factor/categorical  
@@ -59,7 +63,7 @@ my_data = subset(combi, select = -c(Item_Outlet_Sales, Item_Identifier,Outlet_Id
 #check available variables
 colnames(my_data)
 
-#Since PCA works on numeric variables, let’s see if we have any variable other than numeric.
+#Since PCA works on numeric variables, let's see if we have any variable other than numeric.
 str(my_data)
 #so, 6 out of 9 variables are categorical in nature, we need to do some sort of transforamtion for or PCA
 #algorithm to work. 
@@ -78,7 +82,7 @@ new_my_data = dummy.data.frame(my_data, names = c("Item_Fat_Content","Item_Type"
 #check the data set
 str(new_my_data)
 
-#And, we now have all the numerical values. Let’s divide the data into test and train.
+#And, we now have all the numerical values. Let's divide the data into test and train.
 
 #divide the new data
 pca.train = new_my_data[1:nrow(train),]
@@ -112,16 +116,16 @@ prin_comp$rotation
 #This returns 44 principal components loadings coz in a data set, the maximum number of principal component loadings is a
 #minimum of (n-1, p).#44 components are returned because the same is the total number of cols/features after dummification 
 
-#Let’s look at first 4 principal components and first 5 rows.
+#Let's look at first 4 principal components and first 5 rows.
 
 prin_comp$rotation[1:5,1:4]
 
-#3. In order to compute the principal component score vector, we don’t need to multiply the loading with data. Rather, the 
+#3. In order to compute the principal component score vector, we don't need to multiply the loading with data. Rather, the 
 #matrix x has the principal component score vectors in a 8523 × 44 dimension.
 
 dim(prin_comp$x)
 
-#Let’s plot the resultant principal components.
+#Let's plot the resultant principal components.
 
 biplot(prin_comp, scale = 0)
 
