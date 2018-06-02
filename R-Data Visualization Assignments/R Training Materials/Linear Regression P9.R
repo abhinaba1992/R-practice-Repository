@@ -162,7 +162,7 @@ dim(clnloandata_test)
 
 
 #Checkingthe correlation betweenvariables(Here, we can use the function Cor for our data set)
-View(cor(clnloandata_train))
+View(cor(clnloandata_train$LP_1,clnloandata_train$HW_RENT))
 #Here we can take a sneak  peak at the correlation between variables and  especially on our dependent variable interest rate.
 #Wecan also find out any problems of multicollinearity.
 
@@ -281,7 +281,7 @@ rmse_train=sqrt(mean(train_res$Error^2))
 
 #MAPE or mean absolute percentage error is another measure that is used to check the %age of errors
 #in the model
-
+#abs(((Actual-Forecast)/Actual)*100)
 
 #We are now verifying the assumptions
 
