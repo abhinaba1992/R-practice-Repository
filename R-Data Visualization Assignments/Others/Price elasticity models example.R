@@ -4,7 +4,7 @@
 #Data Dictionary
 # Sales: the total eggs sold on the given day
 # Price Eggs: the price of the eggs on the day
-# Ad Type: the type of poster - 0 is the egg poster, 1 is the cookie poster.
+# Ad Type: the type of poster – 0 is the egg poster, 1 is the cookie poster.
 # Price Cookies: the price of cookies on the day
 
 
@@ -72,7 +72,7 @@ View(mtable(m1,m2,m3))
 #Verifying assumptions and checking the model efficiency
 
 # Linearity Plots
-par(mfrow=c(1,2))
+par(mfrow=c(2,2))
 plot(m3) #This would help us to understand the hetroscadastic/homoscadastic nature of our data along with the QQ plot 
          #in order to better understand the Normality of the errors
 par(mfrow=c(1,1))
@@ -99,13 +99,13 @@ durbinWatsonTest(m3)
 
 # Price Elasticity
 # We now have our model:
-# Sales of Eggs = 137.37 - (16.12)Price.Eggs + 4.15 (Ad.Type) - (8.71)Price.Cookies
+# Sales of Eggs = 137.37 – (16.12)Price.Eggs + 4.15 (Ad.Type) – (8.71)Price.Cookies
 # 
 # Own Price Elasticity
 # To calculate Price Elasticity of Demand we use the formula:
-# PE = (??Q/??P) * (P/Q)
+# PE = (ΔQ/ΔP) * (P/Q)
 # 
-# (??Q/??P) is determined by the coefficient -16.12 in our regression formula.
+# (ΔQ/ΔP) is determined by the coefficient -16.12 in our regression formula.
 # To determine (P/Q) we will use the mean Price (4.43) and mean Sales (30).
 # 
 # Therefore we have PE = -16.12 * 4.43/30 = -2.38
@@ -116,9 +116,9 @@ durbinWatsonTest(m3)
 # To calculate Cross Price Elasticity of Demand we are essentially looking for how the price of cookies 
 #impacts the sales of eggs. So we use the formula:
 #   
-#   CPEcookies = (??Q/??Pcookies) * (Pcookies/Q)
+#   CPEcookies = (ΔQ/ΔPcookies) * (Pcookies/Q)
 # 
-# We know from our regression that (??Q/??Pcookies) is the coefficient of Price of Cookies (-8.71).
+# We know from our regression that (ΔQ/ΔPcookies) is the coefficient of Price of Cookies (-8.71).
 # We use the mean price of cookies and mean sales for the rest of the formula giving (4.37/30)
 # 
 # CPEcookies = -8.71 * (4.37/30) = -1.27
@@ -135,7 +135,7 @@ durbinWatsonTest(m3)
 #   Next steps
 # You are now in an ideal situation where you can run an optimization function to set the right price for both 
 #cookies and eggs.
-# This is out of the scope of this post, but if you're interested in doing that check out R's optim() function ~ or 
+# This is out of the scope of this post, but if you’re interested in doing that check out R’s optim() function ~ or 
 #leave a comment below
 
 #Running the price elasticity
