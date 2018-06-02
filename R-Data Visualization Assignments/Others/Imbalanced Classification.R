@@ -1,5 +1,6 @@
 #This piece of code gives us a generic idea of how to handle imbalanced classes in R intended for solving traditional 
 #Classification problem (This is taken from an article at analytics vidhya)
+#Source: https://www.analyticsvidhya.com/blog/2016/03/practical-guide-deal-imbalanced-classification-problems/
 
 #We need to ainstall the rose package for this
 install.packages("ROSE")
@@ -33,7 +34,7 @@ prop.table(table(df$cls))
 
 #As we see, this data set contains only 2% of positive cases and 98% of negative cases. 
 #This is a severely imbalanced data set. So, the imbalance would badly affect our prediction accuracy. 
-#Let’s build a model on this data. I’ll be using decision tree algorithm for modeling purpose.
+#Let's build a model on this data. I'll be using decision tree algorithm for modeling purpose.
 
 library(rpart)
 treeimb <- rpart(cls ~ ., data = hacide.train)
@@ -41,7 +42,7 @@ pred.treeimb <- predict(treeimb, newdata = hacide.test)
 
 
 
-#Let’s check the accuracy of this prediction. To check accuracy, ROSE package has a function names accuracy.meas,
+#Let's check the accuracy of this prediction. To check accuracy, ROSE package has a function names accuracy.meas,
 #it computes important metrics such as precision, recall & F measure.
 accuracy.meas(hacide.test$cls, pred.treeimb[,2])
 
@@ -68,8 +69,8 @@ data_balanced_under = ovun.sample(cls ~ ., data = hacide.train, method = "under"
 table(data_balanced_under$cls)
 
 
-#Now the data set is balanced. But, you see that we’ve lost significant information from the sample. Let’s do both 
-#undersampling and oversampling on this imbalanced data. This can be achieved using method = “both“. In this case, 
+#Now the data set is balanced. But, you see that we've lost significant information from the sample. Let's do both 
+#undersampling and oversampling on this imbalanced data. This can be achieved using method = "both". In this case, 
 #the minority class is oversampled with replacement and majority class is undersampled without replacement.
 
 data_balanced_both <- ovun.sample(cls ~ ., data = hacide.train, method = "both", p=0.5,N=1000, seed = 1)$data
@@ -88,8 +89,8 @@ data.rose = ROSE(cls ~ ., data = hacide.train, seed = 1)$data
 table(data.rose$cls)
 
 
-#This generated data has size equal to the original data set (1000 observations). Now, we’ve balanced data sets using 4 
-#techniques. Let’s compute the model using each data and evaluate its accuracy.
+#This generated data has size equal to the original data set (1000 observations). Now, we've balanced data sets using 4 
+#techniques. Let's compute the model using each data and evaluate its accuracy.
 
 #build decision tree models
 tree.rose = rpart(cls ~ ., data = data.rose)
