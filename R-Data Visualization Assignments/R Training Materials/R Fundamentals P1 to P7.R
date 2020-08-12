@@ -12,7 +12,7 @@
 
 #Part 1 [R Fundamentals] (27th aug2017)
 
-x=(1:5)
+x=(1:5) # Whenever a set of numbers are preceded or/and suceeded by the ":" operator, they become integer by default
 #OR
 x=1:6
 x
