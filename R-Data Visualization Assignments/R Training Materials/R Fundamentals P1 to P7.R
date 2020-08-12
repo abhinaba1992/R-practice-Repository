@@ -1,6 +1,6 @@
 #This portion covers the concepts of R basics, data visualisation in R, data preparation in R and  univariate statistics
 #Author: Abhinaba Chakraborty
-#last Updated: 12.01.2018
+#last Updated: 12.08.2018
 
 #dplyr: used for joins, also functions like mutate, select, filter, arrange, summarise and other data preparation functions.
 #psych : contains the describe function
@@ -12,27 +12,73 @@
 
 #Part 1 [R Fundamentals] (27th aug2017)
 
-x=(1:5) # Whenever a set of numbers are preceded or/and suceeded by the ":" operator, they become integer by default
+
+#6 basic data types
+# Character
+# Numeric (real or decimal)
+# integer
+# logical
+# complex
+# raw (rarely used)
+
+
+x=(1:5) # Whenever a set of whole numbers are preceded or/and suceeded by the ":" operator, they become integer by default
 #OR
 x=1:6
 x
 
+
+#Character Assignment
 y="a"
 #OR
 y='a'
 y
 
-rm(x) #to remove an object
+#Single and double quotes delimit character constants. They can be used interchangeably but double quotes are preferred 
+#(and character constants are printed using double quotes), so single quotes are normally only used to delimit character 
+#constants containing double quotes.
 
-ls()    #Displays all the functuion in the memory
 
-rm(list=ls()) #Removes all the object in the memory,2 step process, 1st assign all the objects inthe memoryinto a list, 2nd remove the list
+#e.g.
+# 1 - double quotes inside single quotes (This would give "\"a\"" when printed - it delimits the string whenever there is a
+#double Quote)
+y='"a"' 
+# 2 - single quote within double Quotes (This would give "'a'" when printed)
+y="'a'"
+
+#it is thus preferable to use double quotes
+
+
+
+#rm() is basically 'remove{base}', it is used to Remove Objects from a Specified Environment, it can't fuction
+#by itself until and unless is passed to it
+
+rm() # This would do nothing to help our cause
+
+rm(x) #to remove an object from the environment
+
+ls()  #Displays all the objects in the memory (if you do a typeof(ls()) you would get character)
+
+rm(list=ls()) #Removes all the object in the memory,2 step process, 1st assign all the objects in the memoryinto a list, 2nd remove the list
+
+
+
+# Class helps us to know the kind of object (On a high-level) [its like a container of an object - an attrbute that makes this
+#object behave externally with functions that take this particular 'type' of object as an argument]
+
+# Typeof helps us to know the object's data type (On a low-levle) [its like whats the object is made of inside the container]
 
 class(x)  #Help usto determinethe dat type of a variable
 
 typeof(x) #Sams as class; however, unlike class function, the representation may be different for some data types/structures
 #---------------------------------------------------------------------------------------------------
 #Explicit casting for integer 
+
+# Integers are signed 32 bit numbers so they can hold between -2147483648 and +2147483647 and take up 4 bytes
+# Numeric is identical to an 64-bit double conforming to the IEEE 754 standard. These can take much larger values because
+# they are stored as double precision floating point numbers. Which is bascially a fancy of way of saying that they are
+# saved in two parts - a base and a significand.
+
 
 a=1   
 class(a) # here a would be numeric
@@ -83,7 +129,7 @@ class(a)
 a="Good"
 b="boy"
 #func 1 first part
-paste(a,b) #concatinating normally 
+paste(a,b) #concatinating normally (Useful when you want a space or any other seperator between the merged characters)
 
 #func 1 second part
 paste(a,b,sep=":") #concatinating with a seperator
@@ -132,7 +178,8 @@ nchar(b)
 a=c("abc","def","ghi")
 a
 
-# its possible to create an object with a null value and pass actual values to it at later stage
+# its possible to create an object with a null value and pass actual values to it at later stage (This can also be done with
+# other primary data types)
 a=NULL
 a=c("abc","def","ghi")
 a 
@@ -148,10 +195,10 @@ a[1] # by index
 a[-1] # this will select all the values except the one for whose index you have applied anegative value
 
 a[c(1,3)] # Accessing multiple values by passing a vector of indexes to get the specific values
-
 a[-c(1,2)]  # this helps to reject the values provided within the index vector
 
 a[c(1:2)]   # this will hep in getting all the elements from 1st to 2nd position
+a[-c(1:2)] # this would help rejecting the series we makred and select the remaining values
 
 a[c(1,2,-3)]  # THIS IS HOWEVER NOT POSSIBLE AS WE ARE CONFUSING THE R COMPILER about the selection
 
@@ -161,13 +208,15 @@ a[c(1,1)] # We can also pass the same index multiple times,in that case,we would
 #---------------------------------------------------------------------------------------------------
 a=c(1,2,4,5,6)
 # applying any binary operator on a vector would apply on all the elements of the same
-a>4
-a+1
+a>4 # This would return - FALSE FALSE FALSE  TRUE  TRUE
+a+1 
 a-1
 a*4
 a/4
 
+#Filtering vectors
 a[a>4] # This will help us access the elements that only satisfy agiven condition
+a[(a>2 & a<6)] # Applying multiple filters
 
 a[!a>4]  # This is just the opposite of the above statement
 #---------------------------------------------------------------------------------------------------
@@ -213,7 +262,7 @@ a-b
 a*b
 a/b
 #---------------------------------------------------------------------------------------------------
-#match function isused to comapre two vectors and find possible matches, eg
+#match function isused to compare two vectors and find possible matches, eg
 a=c(1,91,98,3,5,99,7)
 c=98
 b=c(91,98,7)
@@ -227,13 +276,15 @@ b %in% a
 a=c(1,1,2,2,3,4,5)
 unique(a)
 #---------------------------------------------------------------------------------------------------
-#The following function helps to find the length of a vector
+#The following function helps to find the length of a vector [nchar wont work here as it is designed to return the number of
+#characters in each of the element of a vector]
 a=c(1,1,2,2,3,4,5)
 length(a)
 #---------------------------------------------------------------------------------------------------
 #The which function will help us to subset a vector based on some condition 
 a=c(1,2,3,4,5)
-a[which(a>2)]
+a[which(a>2)] #We can also use a[a>2] instead of which if we wish to,
+
 #---------------------------------------------------------------------------------------------------
 #The following function is used to reverse the contents of a vector
 a=c(1,2,3,4,5)
@@ -241,7 +292,7 @@ rev(a)
 #---------------------------------------------------------------------------------------------------
 #The sample function and it's variations
 a=c(1:100)
-#Taking sample
+#Taking sample (Randomly pics all the numbers in the vector)
 sample(a)
 #Taking sample for a specific no. of counts
 sample(a,20)
@@ -314,7 +365,7 @@ df2[c(1,2,3),]   # specific rows
 df2[,c(1,2,3)]   # specific cols
 
 #Accessing specific rows and columns
-df2[c(1,2,3),c(1,2,3)]   # specific rows
+df2[c(1,2,3),c(1,2,3)]   # specific rows and cols
 
 #Accessing series of cols
 df2[,c(1:3)]
@@ -325,7 +376,7 @@ df2[c(1:3),]
 #Accessing series of rows and cols
 df2[c(1:3),c(1:3)]
 
-#Accessing based on colnames and rownames
+#Accessing based on colnames and rownames (Negative sign doesn't workout with this)
 df2[,c("mpg","cyl")]  #Based on column names
 df2[c("Fiat 128","Toyota Corolla"),]  #Based on row names
 
@@ -342,6 +393,14 @@ df2[,-c(1,2,3)]   # specific set of cols
 
 
 df2[-c(1,2,3),-c(1,2,3)]    #Rows and cols 
+
+
+
+df2[-c(1:3),]   # specific set of rows
+df2[,-c(1:3)]   # specific set of cols
+
+
+df2[-c(1:3),-c(1:3)]    #Rows and cols 
 
 
 #We cannot exclude rows or columns based on column names or row names
@@ -561,6 +620,13 @@ boxplot(df1$mpg~df1$am)
 
 #Barplot function is used to vizualise the categorical variables
 barplot(table(df1$am))
+#Upper and lower whisker value calculation
+#upper whisker = min(max(x), Q_3 + 1.5 * IQR) 
+#lower whisker = max(min(x), Q_1 - 1.5 * IQR)
+
+
+
+
 #---------------------------------------------------------------------------------------------------
 
 #Getting the percentage of numerical data in our categorical col
@@ -1143,4 +1209,3 @@ ggplot(DataSetGrouped, aes(name, value)) +
   geom_bar(aes(fill = variable), stat="identity") +
   scale_fill_brewer(palette="Pastel1") +
   theme_dark()
-
